@@ -1,7 +1,10 @@
 #! /usr/bin/env python
 # encoding: utf-8
 from test_main import *
-import time                                                
+
+import time
+from interfits.lib import coords
+import numpy as np
 
 def timeme(method):
     def wrapper(*args, **kw):
@@ -74,9 +77,8 @@ def test_coordTransform():
     assert np.allclose(xyz, np.column_stack( [abc[:,1], abc[:,0], -1*abc[:, 2]] ))
 
 if __name__ == "__main__":
-    #test_coords()
-    
-    #test_computeBaselineVectors()
+    test_coords()
+    test_computeBaselineVectors()
     test_coordTransform()
     
 

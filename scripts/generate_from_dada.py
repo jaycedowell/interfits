@@ -20,8 +20,8 @@ def generate_fitsidi(filename_in, filename_out=None):
         filename_out = os.path.split(filename_in)[0] + '.fitsidi'
     
     uvw = LedaFits(filename_in)
-    uvw.loadAntArr()
-    uvw.generateUVW(src='ZEN', use_stored=False, update_src=True)
+    #uvw.loadAntArr()
+    #uvw.generateUVW(src='ZEN', use_stored=False, update_src=True)
     #uvw.apply_cable_delays()
     uvw.exportFitsidi(filename_out)
     

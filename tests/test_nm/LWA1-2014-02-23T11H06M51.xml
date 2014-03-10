@@ -165,7 +165,7 @@
        <NO_CHAN>   params['NCHAN'] </NO_CHAN>
        <REF_FREQ>51600000.0</REF_FREQ>
        <CHAN_BW>24000.0</CHAN_BW>
-       <REF_PIXL>301</REF_PIXL>
+       <REF_PIXL>300</REF_PIXL>
        <TABREV>    1               </TABREV>
        <EXTVER>    1               </EXTVER>
     </COMMON>

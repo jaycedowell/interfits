@@ -1,12 +1,22 @@
-from test_main import *
+from test_main import compare_dicts
+from interfits.interfits import InterFits, PrintLog
+from interfits.ledafits import LedaFits
+import os
+import numpy as np
 import pylab as plt
 import time
 
+pp = PrintLog()
+h1 = pp.h1
+h2 = pp.h2
 
 def test_compare_flux():
 
     uvf  = LedaFits('data/test_lalc.fitsidi')
-    lalc = LedaFits('data/test_lalc.LA')
+
+    lalc = LedaFits()
+    lalc.filename = 'data/test_lalc.LA'
+    lalc.readLfile(n_ant=256, n_chans=109)
 
 
     lalc_flux = lalc.d_uv_data['FLUX']
@@ -76,7 +86,10 @@ def test_compare_flux():
 def test_compare_headers():
 
     uvf  = LedaFits('data/test_lalc.fitsidi')
-    lalc = LedaFits('data/test_lalc.LA')
+
+    lalc = LedaFits()
+    lalc.filename = 'data/test_lalc.LA'
+    lalc.readLfile(n_ant=256, n_chans=109)
 
     ok_count = 0
     # Check all header values

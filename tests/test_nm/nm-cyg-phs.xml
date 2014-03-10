@@ -125,7 +125,7 @@
       <GROUPS>T</GROUPS>
       <GCOUNT>0</GCOUNT>
       <PCOUNT>0</PCOUNT>
-      <CORRELAT>'LEDA'</CORRELAT>
+      <CORRELAT>''</CORRELAT>
     </PRIMARY>
     
 
@@ -158,14 +158,14 @@
     
     <COMMON>
        <OBSCODE>''</OBSCODE>           
-       <RDATE>'2014-02-23'</RDATE>         
+       <RDATE>'2014-01-29'</RDATE>         
        <NO_STKD>   params['NSTOKES']</NO_STKD>
        <STK_1>-5</STK_1>
        <NO_BAND>   params['NBAND'] </NO_BAND>
        <NO_CHAN>   params['NCHAN'] </NO_CHAN>
        <REF_FREQ>51600000.0</REF_FREQ>
        <CHAN_BW>24000.0</CHAN_BW>
-       <REF_PIXL>301</REF_PIXL>
+       <REF_PIXL>300</REF_PIXL>
        <TABREV>    1               </TABREV>
        <EXTVER>    1               </EXTVER>
     </COMMON>
@@ -249,7 +249,7 @@
       <ARRAYX>-1602206.58909</ARRAYX>
       <ARRAYY>-5042244.2889</ARRAYY>
       <ARRAYZ>3554076.31847</ARRAYZ>
-      <ARRNAM>'LEDA64-NM'</ARRNAM>
+      <ARRNAM>'LWA1'</ARRNAM>
       <NUMORB>   0              </NUMORB>
       <FREQ>55200000.0</FREQ> 
       <FRAME>    'GEOCENTRIC'   </FRAME>
@@ -357,7 +357,7 @@
   <UV_DATA>
     <EXTNAME>   'UV_DATA'   </EXTNAME>
     <TABREV>    2           </TABREV>
-    <DATE-OBS>'2014-02-23T11:06:51'</DATE-OBS>
+    <DATE-OBS>'2014-01-29T22:44:13'</DATE-OBS>
     <TELESCOP>'LWA1'</TELESCOP>
     <OBSERVER>  'D FAULT'    </OBSERVER>
     <EQUINOX>   'J2000'     </EQUINOX>

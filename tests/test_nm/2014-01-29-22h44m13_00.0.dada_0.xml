@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
 	config.xml
@@ -43,7 +44,7 @@
 	==================
 	For more info on the FITS IDI file format, refer to:
 	* AIPS Memo No. 102:  The FITS Interferometry Data Interchange Format;
-	* AIPS Memo 114r: The FITS Interferometry Data Interchange Convention &#8212; Revised; and,
+	* AIPS Memo 114r: The FITS Interferometry Data Interchange Convention — Revised; and,
   * http://fits.gsfc.nasa.gov/registry/fitsidi.html
   It will definitely help you fill this file out if you have a copy of the memo!
 	
@@ -51,7 +52,9 @@
 	Created by Danny Price on 2011-05-06.
 	Copyright (c) 2011 The University of Oxford. All rights reserved.
 
---><config name="BlankConfig">
+-->
+
+<config name="BlankConfig">
     
   <notes> 'Blank configuration file for generating FITS-IDI schema.' </notes>
   
@@ -80,9 +83,9 @@
     -->
     
     <PARAMETERS>
-      <NSTOKES>4</NSTOKES>
-      <NBAND>1</NBAND>  
-      <NCHAN>600</NCHAN> 
+      <NSTOKES>4     </NSTOKES>
+      <NBAND>  1     </NBAND>
+      <NCHAN>  600  </NCHAN>
       <NTONE>  1     </NTONE>
       <NORB>   1     </NORB>
       <NPOLY>  1     </NPOLY>
@@ -125,7 +128,7 @@
       <GROUPS>T</GROUPS>
       <GCOUNT>0</GCOUNT>
       <PCOUNT>0</PCOUNT>
-      <CORRELAT>'LEDA'</CORRELAT>
+      <CORRELAT>'CORRELAT'</CORRELAT>
     </PRIMARY>
     
 
@@ -157,15 +160,15 @@
     -->
     
     <COMMON>
-       <OBSCODE>''</OBSCODE>           
-       <RDATE>'2014-02-23'</RDATE>         
+       <OBSCODE>   'OBSCODE'      </OBSCODE>           
+       <RDATE>     '2000-01-01'    </RDATE>         
        <NO_STKD>   params['NSTOKES']</NO_STKD>
-       <STK_1>-5</STK_1>
+       <STK_1>     -1              </STK_1>
        <NO_BAND>   params['NBAND'] </NO_BAND>
        <NO_CHAN>   params['NCHAN'] </NO_CHAN>
-       <REF_FREQ>51600000.0</REF_FREQ>
-       <CHAN_BW>24000.0</CHAN_BW>
-       <REF_PIXL>301</REF_PIXL>
+       <REF_FREQ>  50.0E+06        </REF_FREQ>
+       <CHAN_BW>   24.0E+03       </CHAN_BW>
+       <REF_PIXL>  1.00E+00        </REF_PIXL>
        <TABREV>    1               </TABREV>
        <EXTVER>    1               </EXTVER>
     </COMMON>
@@ -195,16 +198,16 @@
     POLTYPE notes:
     If the table contains information about the polarization characteristics of the feeds 
     then the feed parameterization that is used shallbe indicated by the value of the POLTYPE
-     keyword as given in Table 23. See &#8220;Feed Polarization&#8221; on page 17.
-    &#8216;APPROX&#8217; Linear approximation for circular feeds
-    &#8216;X-Y LIN&#8217; Linear approximation for linear feeds
-    &#8216;ORI-ELP&#8217; Orientation and ellipticity
+     keyword as given in Table 23. See “Feed Polarization” on page 17.
+    ‘APPROX’ Linear approximation for circular feeds
+    ‘X-Y LIN’ Linear approximation for linear feeds
+    ‘ORI-ELP’ Orientation and ellipticity
 
     -->
 
     <ANTENNA>
         <EXTNAME> 'ANTENNA'   </EXTNAME>
-        <NOPCAL>3</NOPCAL>
+        <NOPCAL>  0         </NOPCAL>
         <POLTYPE> 'X-Y LIN'  </POLTYPE>
     </ANTENNA>
 
@@ -228,7 +231,7 @@
     TIMSYS  Time system
     RDATE   Reference date
     GSTIA0  Grenwich Sidereal time at 0 hrs
-    DEGPDY  The Earth&#8217;s rotation rate in deg per day
+    DEGPDY  The Earth’s rotation rate in deg per day
     UT1UTC  UT1 - UTC
     IATUTC  IAT - UTC
     POLARX  x coordinate of north pole
@@ -246,12 +249,12 @@
 
     <ARRAY_GEOMETRY>
       <EXTNAME>  'ARRAY_GEOMETRY' </EXTNAME>
-      <ARRAYX>-1602206.58909</ARRAYX>
-      <ARRAYY>-5042244.2889</ARRAYY>
-      <ARRAYZ>3554076.31847</ARRAYZ>
-      <ARRNAM>'LEDA64-NM'</ARRNAM>
+      <ARRAYX>   1E+03          </ARRAYX>
+      <ARRAYY>   1E+03          </ARRAYY>
+      <ARRAYZ>   1E+03          </ARRAYZ>
+      <ARRNAM>   'ARRNAM'       </ARRNAM>
       <NUMORB>   0              </NUMORB>
-      <FREQ>55200000.0</FREQ> 
+      <FREQ>     1.0E+06        </FREQ> 
       <FRAME>    'GEOCENTRIC'   </FRAME>
       <TIMSYS>   'UTC'          </TIMSYS>
       <TIMESYS>  'UTC'          </TIMESYS>
@@ -341,14 +344,14 @@
   * DEC - this is part of the charm of FITS IDI
 
   Which column is the visibility matrix in? I've hard coded this to 11
-  TMATXn L T &#8212; column n contains the visibility matrix
+  TMATXn L T — column n contains the visibility matrix
 
   Finally, some values that you might to change: 
   EQUINOX   Mean equinox (probably J2000)
   WEIGHTYP  Type of data weights
   DATE-OBS  Observing date
   TELESCOP  Telescope name
-  OBSERVER  Observer&#8217;s name
+  OBSERVER  Observer’s name
   VIS SCAL  Visibility scale factor
   SORT      Sort order, * does no sorting (thus the quickest?)
   
@@ -357,8 +360,8 @@
   <UV_DATA>
     <EXTNAME>   'UV_DATA'   </EXTNAME>
     <TABREV>    2           </TABREV>
-    <DATE-OBS>'2014-02-23T11:06:51'</DATE-OBS>
-    <TELESCOP>'LWA1'</TELESCOP>
+    <DATE-OBS>  '2000-01-01'</DATE-OBS>
+    <TELESCOP>  'TELESCOP'    </TELESCOP>
     <OBSERVER>  'D FAULT'    </OBSERVER>
     <EQUINOX>   'J2000'     </EQUINOX>
     <WEIGHTY>   'NORMAL'    </WEIGHTY>
@@ -372,14 +375,14 @@
     <CRVAL1>    1.000E+00   </CRVAL1>
     <MAXIS2>    params['NSTOKES'] </MAXIS2>
     <CTYPE2>    'STOKES'    </CTYPE2> 
-    <CDELT2>-1</CDELT2>
+    <CDELT2>    -1.000E+00  </CDELT2>
     <CRPIX2>    1.0000E+00  </CRPIX2>
-    <CRVAL2>-5</CRVAL2>
+    <CRVAL2>    -1.000E+00  </CRVAL2>
     <MAXIS3>    params['NCHAN'] </MAXIS3>
     <CTYPE3>    'FREQ'      </CTYPE3>
-    <CDELT3>24000.0</CDELT3>
+    <CDELT3>    0.01E+06    </CDELT3>
     <CRPIX3>    1.00000E+00 </CRPIX3>
-    <CRVAL3>51600000.0</CRVAL3>
+    <CRVAL3>    1.000E+06   </CRVAL3>
     <MAXIS4>    params['NBAND'] </MAXIS4>
     <CTYPE4>    'BAND'      </CTYPE4>
     <CDELT4>    1.000E+00   </CDELT4>

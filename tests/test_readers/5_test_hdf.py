@@ -1,5 +1,18 @@
-from test_main import *
+from test_main import compare_dicts
+from interfits.interfits import InterFits, PrintLog
+from interfits.ledafits import LedaFits
+import os
 import numpy as np
+import pylab as plt
+import time
+
+pp = PrintLog()
+h1 = pp.h1
+h2 = pp.h2
+
+import pprint
+ppp = pprint.PrettyPrinter(indent=4)
+ppp = ppp.pprint
 
 def test_hdf():
     idi = LedaFits('data/test_lalc.fitsidi')

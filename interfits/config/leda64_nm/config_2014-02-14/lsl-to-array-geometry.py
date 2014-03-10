@@ -28,7 +28,7 @@ for s in stands:
     xyz = trans1*np.matrix([[x],[y],[z]])
     
     stabxyz.append(list(np.round(np.array(xyz).flatten(), 3)))
-    stabxyz_topo.append(np.array((x,y,z)).flatten())
+    stabxyz_topo.append((x,y,z))
     
     # Adding in delays
     sd = ant[ant['STAND'] == s][' DELAY'].values * SOL
@@ -51,6 +51,7 @@ for ll in range(len(stabxyz)):
 #print stand_names
 #print delays
 
+
 json.dump(stand_names, open('json/stands-temp.json', 'w'))
-json.dump(stabxyz, open('json/stabxyz-temp.json', 'w'))
+json.dump(stabxyz_topo, open('json/stabxyz-topo-temp.json', 'w'))
 json.dump(delays, open('json/delays-temp.json', 'w'))

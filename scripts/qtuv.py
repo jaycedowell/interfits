@@ -310,7 +310,7 @@ class InterFitsGui(QtGui.QWidget):
                     
             event.canvas.draw()
                 
-        h1("Loading PyQt GUI")
+        #h1("Loading PyQt GUI")
         self.fig_connect = self.sp_fig.canvas.mpl_connect('button_press_event', on_click)
         self.fig_connect2 = self.sp_fig.canvas.mpl_connect('draw_event', on_draw)
     

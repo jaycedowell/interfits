@@ -17,3 +17,7 @@ lconverter/SLALIB_C
 old/
 .idea/
 .DS_Store
+build
+config
+interfits.egg-info
+dist

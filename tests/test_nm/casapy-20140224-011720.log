@@ -1,0 +1,197 @@
+2014-02-24 01:17:24	INFO	casa::::casa	---
+2014-02-24 01:17:24	INFO	casa::::casa	CASA Version 4.2.0 (stable r26465)
+2014-02-24 01:17:24	INFO	casa::::casa	  Tagged on: Mon, 09 Sep 2013
+2014-02-24 01:17:52	INFO	importfitsidi::::casa	
+2014-02-24 01:17:52	INFO	importfitsidi::::casa+	##########################################
+2014-02-24 01:17:52	INFO	importfitsidi::::casa+	##### Begin Task: importfitsidi      #####
+2014-02-24 01:17:52	INFO	importfitsidi::::casa	importfitsidi(fitsidifile="lwa-cyg.fitsidi",vis="nm-cyg.vis")
+2014-02-24 01:17:52	INFO	importfitsidi::::casa	
+2014-02-24 01:17:52	INFO	importfitsidi::::casa	### Reading file lwa-cyg.fitsidi
+2014-02-24 01:17:52	INFO	FitsIDItoMS()::readFitsFile	Found binary table ARRAY_GEOMETRY
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable	number of antennas = 32
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable	array ref pos = [-1.60221e+06, -5.04224e+06, 3.55408e+06]
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable	   antenna_no 1 -> antenna ID 0
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 2 -> antenna ID 1
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 3 -> antenna ID 2
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 4 -> antenna ID 3
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 5 -> antenna ID 4
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 6 -> antenna ID 5
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 7 -> antenna ID 6
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 8 -> antenna ID 7
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 9 -> antenna ID 8
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 10 -> antenna ID 9
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 11 -> antenna ID 10
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 12 -> antenna ID 11
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 13 -> antenna ID 12
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 14 -> antenna ID 13
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 15 -> antenna ID 14
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 16 -> antenna ID 15
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 17 -> antenna ID 16
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 18 -> antenna ID 17
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 19 -> antenna ID 18
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 20 -> antenna ID 19
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 21 -> antenna ID 20
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 22 -> antenna ID 21
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 23 -> antenna ID 22
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 24 -> antenna ID 23
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 25 -> antenna ID 24
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 26 -> antenna ID 25
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 27 -> antenna ID 26
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 28 -> antenna ID 27
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 29 -> antenna ID 28
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 30 -> antenna ID 29
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 31 -> antenna ID 30
+2014-02-24 01:17:52	INFO	FitsIDItoMS::fillAntennaTable+	   antenna_no 32 -> antenna ID 31
+2014-02-24 01:17:52	INFO	FitsIDItoMS()::readFitsFile	Found binary table FREQUENCY
+2014-02-24 01:17:52	INFO	FitsIDItoMS()::readFitsFile	Found binary table ANTENNA
+2014-02-24 01:17:52	WARN	FitsIDItoMS()::readFitsFile	Treating POLAA and POLAB columns in input ANTENNA table as scalar,
+2014-02-24 01:17:52	WARN	FitsIDItoMS()::readFitsFile+	 i.e. using same value for all bands.
+2014-02-24 01:17:52	WARN	FitsIDItoMS()::readFitsFile	POLCALA and/or POLCALB column is missing in ANTENNA table.
+2014-02-24 01:17:52	INFO	FitsIDItoMS()::readFitsFile	Found binary table SOURCE
+2014-02-24 01:17:52	WARN	FitsIDItoMS()::fillFieldTable	Treating ?FLUX, ALPHA, FREQOFF, SYSVEL, and RESTFREQ columns in input SOURCE table as scalar,
+2014-02-24 01:17:52	WARN	FitsIDItoMS()::fillFieldTable+	 i.e. using same value for all bands.
+2014-02-24 01:17:52	INFO		FITS card 48: CDELT2  =                   -1                                                  
+2014-02-24 01:17:52	INFO		Keyword value has wrong data type.
+2014-02-24 01:17:52	INFO		... converted to type double.
+2014-02-24 01:17:52	INFO		FITS card 60: CRVAL2  =                   -5                                                  
+2014-02-24 01:17:52	INFO		Keyword value has wrong data type.
+2014-02-24 01:17:52	INFO		... converted to type double.
+2014-02-24 01:17:52	WARN		FITS card 72: EQUINOX = 'J2000   '                                                            
+2014-02-24 01:17:52	WARN		Keyword value has wrong data type.
+2014-02-24 01:17:52	INFO		FITS::NOVALUE found
+2014-02-24 01:17:52	WARN		WEIGHT keyword in UV_DATA table presently not supported.
+2014-02-24 01:17:52	INFO	FitsIDItoMS()::readFitsFile	Found binary table UV_DATA
+2014-02-24 01:17:52	INFO	FITSUtil::fromFITSHeader 	Reading and writing visibility data
+2014-02-24 01:17:52	INFO	MSFitsIDI::readFITSFile() 	Subtables found: [ARRAY_GEOMETRY, FREQUENCY, ANTENNA, SOURCE]
+2014-02-24 01:17:52	INFO	importfitsidi::::casa	##### End Task: importfitsidi        #####
+2014-02-24 01:17:52	INFO	importfitsidi::::casa+	##########################################
+2014-02-24 01:17:53	INFO	bandpass::::casa	
+2014-02-24 01:17:53	INFO	bandpass::::casa+	##########################################
+2014-02-24 01:17:53	INFO	bandpass::::casa+	##### Begin Task: bandpass           #####
+2014-02-24 01:17:53	INFO	bandpass::::casa	bandpass(vis="nm-cyg.vis",caltable="nm-cyg.B",field="",spw="",
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        intent="",selectdata=True,timerange="",uvrange="",antenna="",
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        scan="",observation="",msselect="",solint="inf",combine="scan",
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        refant="",minblperant=4,minsnr=3.0,solnorm=False,bandtype="B",
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        smodel=[],append=False,fillgaps=0,degamp=3,degphase=3,
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        visnorm=False,maskcenter=0,maskedge=5,docallib=False,callib="",
+2014-02-24 01:17:53	INFO	bandpass::::casa+	        gaintable=[],gainfield=[],interp=[],spwmap=[],parang=False)
+2014-02-24 01:17:53	INFO	bandpass::calibrater::open	Opening MS: nm-cyg.vis for calibration.
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::	Initializing nominal selection to the whole MS.
+2014-02-24 01:17:53	INFO	bandpass::calibrater::reset	Reseting solve/apply state
+2014-02-24 01:17:53	INFO	bandpass::calibrater::setdata	Beginning selectvis--(MSSelection version)-------
+2014-02-24 01:17:53	INFO	bandpass::calibrater::reset	Reseting solve/apply state
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::selectvis	Performing selection on MeasurementSet
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::selectvis	Selection did not drop any rows
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::selectvis	Frequency selection: Selecting all channels in all spws.
+2014-02-24 01:17:53	INFO	bandpass::calibrater::setsolve	Beginning setsolve--(MSSelection version)-------
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::setsolve	Arranging to SOLVE:
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::setsolve	.   B Jones: table=nm-cyg.B append=false solint=inf,none refant='none' minsnr=3 apmode=AP solnorm=false
+2014-02-24 01:17:53	INFO	bandpass::calibrater::solve	Beginning solve-----------------------------
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::solve	The following calibration terms are arranged for apply:
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::solve	.   (None)
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::solve	The following calibration term is arranged for solve:
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::solve	.   B Jones: table=nm-cyg.B append=false solint=inf,none refant='none' minsnr=3 apmode=AP solnorm=false
+2014-02-24 01:17:53	INFO	bandpass::Calibrater::solve	Solving for B Jones
+2014-02-24 01:17:53	INFO	bandpass::::	Combining scans.
+2014-02-24 01:17:53	INFO	bandpass::::	For solint = inf, found 1 solution intervals.
+2014-02-24 01:17:55	INFO	bandpass::Calibrater::solve	  Found good B Jones solutions in 1 slots.
+2014-02-24 01:17:55	INFO	bandpass::::	Writing solutions to table: nm-cyg.B
+2014-02-24 01:17:55	INFO	bandpass::calibrater::solve	Finished solving.
+2014-02-24 01:17:55	INFO	bandpass::::casa	##### End Task: bandpass             #####
+2014-02-24 01:17:55	INFO	bandpass::::casa+	##########################################
+2014-02-24 01:17:56	INFO	applycal::::casa	
+2014-02-24 01:17:56	INFO	applycal::::casa+	##########################################
+2014-02-24 01:17:56	INFO	applycal::::casa+	##### Begin Task: applycal           #####
+2014-02-24 01:17:56	INFO	applycal::::casa	applycal(vis="nm-cyg.vis",field="",spw="",intent="",
+2014-02-24 01:17:56	INFO	applycal::::casa+	        selectdata=True,timerange="",uvrange="",antenna="",scan="",
+2014-02-24 01:17:56	INFO	applycal::::casa+	        observation="",msselect="",docallib=False,callib="",gaintable="nm-cyg.B",
+2014-02-24 01:17:56	INFO	applycal::::casa+	        gainfield=[],interp=[],spwmap=[],calwt=[True],parang=False,
+2014-02-24 01:17:56	INFO	applycal::::casa+	        applymode="",flagbackup=True)
+2014-02-24 01:17:56	INFO	applycal::calibrater::open	Opening MS: nm-cyg.vis for calibration.
+2014-02-24 01:17:56	INFO	applycal::VisSetUtil::addScrCols	Adding CORRECTED_DATA column(s).
+2014-02-24 01:17:56	INFO	applycal::VisSetUtil::initScrCols	Initializing CORRECTED_DATA (to DATA).
+2014-02-24 01:17:56	INFO	applycal::VisSetUtil::initScrCols	Initialized 5280 rows.
+2014-02-24 01:17:56	INFO	applycal::Calibrater::	Initializing nominal selection to the whole MS.
+2014-02-24 01:17:56	INFO	applycal::AgentFlagger::open	Table type is Measurement Set
+2014-02-24 01:17:56	INFO	applycal::::	Creating new backup flag file called before_applycal_1
+2014-02-24 01:17:56	INFO	applycal::calibrater::setdata	Beginning selectvis--(MSSelection version)-------
+2014-02-24 01:17:56	INFO	applycal::calibrater::reset	Reseting solve/apply state
+2014-02-24 01:17:56	INFO	applycal::Calibrater::selectvis	Performing selection on MeasurementSet
+2014-02-24 01:17:56	INFO	applycal::Calibrater::selectvis	Selection did not drop any rows
+2014-02-24 01:17:56	INFO	applycal::Calibrater::selectvis	Frequency selection: Selecting all channels in all spws.
+2014-02-24 01:17:56	INFO	applycal::calibrater::setapply	Beginning setapply--(MSSelection version)-------
+2014-02-24 01:17:56	INFO	applycal::Calibrater::setapply(type, applypar)	Arranging to APPLY:
+2014-02-24 01:17:56	INFO	applycal::Calibrater::setapply(type, applypar)	.   B Jones: table=nm-cyg.B select= interp=linear, spwmap=[-1] calWt=true
+2014-02-24 01:17:56	INFO	applycal::calibrater::correct	Beginning correct---------------------------
+2014-02-24 01:17:56	INFO	applycal::Calibrater::correct	The following calibration terms are arranged for apply:
+2014-02-24 01:17:56	INFO	applycal::Calibrater::correct	.   B Jones: table=nm-cyg.B select= interp=linear, spwmap=[-1] calWt=true
+2014-02-24 01:17:56	INFO	applycal::calibrater::correct	Finished correcting.
+2014-02-24 01:17:56	INFO	applycal::::casa	Calibration apply flagging statistics:
+2014-02-24 01:17:56	INFO	applycal::::casa	  Total selected visibilities = 12672000
+2014-02-24 01:17:56	INFO	applycal::::casa	  Flags:
+2014-02-24 01:17:56	INFO	applycal::::casa	   B Jones: In: 0 (0.0%) --> Out: 0 (0.0%) (nm-cyg.B)
+2014-02-24 01:17:57	INFO	applycal::::casa	##### End Task: applycal             #####
+2014-02-24 01:17:57	INFO	applycal::::casa+	##########################################
+2014-02-24 01:17:58	INFO	clean::::casa	
+2014-02-24 01:17:58	INFO	clean::::casa+	##########################################
+2014-02-24 01:17:58	INFO	clean::::casa+	##### Begin Task: clean              #####
+2014-02-24 01:17:58	INFO	clean::::casa	clean(vis="nm-cyg.vis",imagename="nm-cyg.img",outlierfile="",field="",
+2014-02-24 01:17:58	INFO	clean::::casa+	        spw="",selectdata=True,timerange="",uvrange="",antenna="",
+2014-02-24 01:17:58	INFO	clean::::casa+	        scan="",observation="",intent="",mode="mfs",resmooth="",
+2014-02-24 01:17:58	INFO	clean::::casa+	        gridmode="",wprojplanes=1,facets=1,cfcache="cfcache.dir",rotpainc=5.0,
+2014-02-24 01:17:58	INFO	clean::::casa+	        painc=360.0,aterm=True,psterm=False,mterm=True,wbawp=False,
+2014-02-24 01:17:58	INFO	clean::::casa+	        conjbeams=True,epjtable="",interpolation="linear",niter=0,gain=0.1,
+2014-02-24 01:17:58	INFO	clean::::casa+	        threshold="0.0mJy",psfmode="clark",imagermode="csclean",ftmachine="mosaic",mosweight=False,
+2014-02-24 01:17:58	INFO	clean::::casa+	        scaletype="SAULT",multiscale=[],negcomponent=-1,smallscalebias=0.6,interactive=False,
+2014-02-24 01:17:58	INFO	clean::::casa+	        mask=[],nchan=-1,start=0,width=1,outframe="",
+2014-02-24 01:17:58	INFO	clean::::casa+	        veltype="radio",imsize=[512, 512],cell="15.0arcmin",phasecenter="",restfreq="",
+2014-02-24 01:17:58	INFO	clean::::casa+	        stokes="I",weighting="natural",robust=0.0,uvtaper=False,outertaper=[''],
+2014-02-24 01:17:58	INFO	clean::::casa+	        innertaper=['1.0'],modelimage="",restoringbeam=[''],pbcor=False,minpb=0.2,
+2014-02-24 01:17:58	INFO	clean::::casa+	        usescratch=False,noise="1.0Jy",npixels=0,npercycle=100,cyclefactor=1.5,
+2014-02-24 01:17:58	INFO	clean::::casa+	        cyclespeedup=-1,nterms=1,reffreq="",chaniter=False,flatnoise=True,
+2014-02-24 01:17:58	INFO	clean::::casa+	        allowchunk=False)
+2014-02-24 01:17:58	INFO	clean::::casa	nchan=-1 start=0 width=1
+2014-02-24 01:17:58	INFO	clean::::casa	Use default channelization for clean
+2014-02-24 01:17:58	INFO	clean::::casa	clean image: nm-cyg.img
+2014-02-24 01:17:58	INFO	Imager::open() 	Opening MeasurementSet /workdata/leda/interfits/test_nm/nm-cyg.vis
+2014-02-24 01:17:58	INFO	clean::::casa	FTMachine used is  ft 
+2014-02-24 01:17:58	INFO	imager::data selection	Performing selection on MeasurementSet : /workdata/leda/interfits/test_nm/nm-cyg.vis
+2014-02-24 01:17:58	INFO	imager::data selection	Selecting on spectral windows expression : *
+2014-02-24 01:17:58	INFO	imager::data selection	Selected all 5280 rows
+2014-02-24 01:17:58	INFO	imager::data selection	Selected: [600 chans in spw 0]
+2014-02-24 01:17:58	INFO	imager::defineimage()	Defining image properties:nx=512 ny=512 cellx='15arcmin' celly='15arcmin' stokes=I' mode=MFS nchan=-1 start=0 step=1 spwids=[-1] fieldid=0 facets=1 frame=5 distance='0'
+2014-02-24 01:17:58	INFO	imager::defineimage()	 phaseCenter='field-0 ' mStart='Radialvelocity: 0' qStep='0 '' mFreqStart='Frequency: 0
+2014-02-24 01:17:58	INFO	Imager::setvp() 	Setting voltage pattern parameters
+2014-02-24 01:17:58	INFO	Imager::setvp() 	Sky position tolerance is 180 degrees
+2014-02-24 01:17:58	INFO	Imager::setvp() 	Using system default voltage patterns for each telescope
+2014-02-24 01:17:58	INFO	imager::makeimage() 	Calculating image (without full skyequation)
+2014-02-24 01:17:58	WARN	Imager::makePBImage() (file /opt/casa/stable-2013-08/code/synthesis/MeasurementEquations/Imager2.cc, line 4003)	Telescope LWA1 is not known
+2014-02-24 01:17:58	WARN	Imager::makePBImage() (file /opt/casa/stable-2013-08/code/synthesis/MeasurementEquations/Imager2.cc, line 4003)+	 Not making the PB  image
+2014-02-24 01:17:58	INFO	Imager::setvp() 	Setting voltage pattern parameters
+2014-02-24 01:17:58	INFO	imager::weight()	Weighting MS: Imaging weights will be changed
+2014-02-24 01:17:58	INFO	imager::weight()	Natural weighting
+2014-02-24 01:17:58	INFO	clean::::casa	Used mask(s) : [''] to create mask image(s) : nm-cyg.img.mask
+2014-02-24 01:17:58	INFO	imager::setoptions() 	Setting processing options
+2014-02-24 01:17:58	INFO	clean::::casa	No model found. Making empty initial model : nm-cyg.img.model
+2014-02-24 01:17:58	INFO	Imager::imagecoordinates() 	Center frequency = 0.0516081 GHz, synthesized continuum bandwidth = 0.0144229 GHz
+2014-02-24 01:17:58	INFO	imager::clean()	Using multifield Clark clean
+2014-02-24 01:17:59	INFO	imager::createFTMachine() 	Multiple fields or facets: transforms will be padded by a factor 1.2
+2014-02-24 01:17:59	INFO	imager::createFTMachine() 	Performing interferometric gridding...
+2014-02-24 01:17:59	INFO	imager::clean()	Clean gain = 0.1, Niter = 0, Threshold = 0 mJy
+2014-02-24 01:17:59	INFO	imager::clean()	Starting deconvolution
+2014-02-24 01:18:00	INFO	ImageSkyModel::makeApproxPSFs	bmaj: 12012.3", bmin: 4804.4", bpa: -74.7257 deg
+2014-02-24 01:18:02	INFO	MFCleanImageSkyModel::solve	Final maximum residual = 0.126434
+2014-02-24 01:18:02	INFO	MFCleanImageSkyModel::solve	Model 0: max, min residuals = 0.126434, -0.061916 clean flux 0
+2014-02-24 01:18:02	INFO	imager::clean()	Threshhold not reached yet.
+2014-02-24 01:18:02	INFO	imager::clean()	Fitted beam used in restoration: 12012.3 by 4804.4 (arcsec) at pa -74.7257 (deg) 
+2014-02-24 01:18:02	INFO	imager::iClean()	Restoring Image(s) with the clean-beam
+2014-02-24 01:18:02	INFO	clean::::casa	##### End Task: clean                #####
+2014-02-24 01:18:02	INFO	clean::::casa+	##########################################
+2014-02-24 01:18:05	INFO	viewer::::casa	
+2014-02-24 01:18:05	INFO	viewer::::casa+	##########################################
+2014-02-24 01:18:05	INFO	viewer::::casa+	##### Begin Task: viewer             #####
+2014-02-24 01:18:05	INFO	viewer::::casa	viewer(infile="",displaytype="raster",channel=0,zoom=1,
+2014-02-24 01:18:05	INFO	viewer::::casa+	        outfile="",outscale=1.0,outdpi=300,outformat="jpg",outlandscape=False,
+2014-02-24 01:18:05	INFO	viewer::::casa+	        gui=True)
+2014-02-24 01:18:06	INFO	viewer::::casa	##### End Task: viewer               #####
+2014-02-24 01:18:06	INFO	viewer::::casa+	##########################################

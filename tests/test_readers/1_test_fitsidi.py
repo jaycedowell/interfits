@@ -1,4 +1,11 @@
-from test_main import *
+from test_main import compare_dicts
+from interfits.interfits import InterFits, PrintLog
+import os
+import numpy as np
+
+pp = PrintLog()
+h1 = pp.h1
+h2 = pp.h2
 
 def test_generate_fitsidi():
     """ Generate a FITS-IDI file
@@ -8,6 +15,7 @@ def test_generate_fitsidi():
     filename_idi = filename_uvf.rstrip('.uvfits')+'.fitsidi'
     uvf = InterFits(filename_uvf)
     uvf.exportFitsidi(filename_idi)
+
 
 def test_compare_uv2idi():
     """ Compare a uvfits file to a fits-idi file to confirm they are equivalent """

@@ -1,13 +1,24 @@
-from test_main import *
+from test_main import compare_dicts
+from interfits.interfits import InterFits, PrintLog
+from interfits.ledafits import LedaFits
+import os
+import numpy as np
 import pylab as plt
 import time
+
+pp = PrintLog()
+h1 = pp.h1
+h2 = pp.h2
 
 
 def test_lalc():
     """ Check that LA->interfits->LA->interfits creates identical data. """
 
-    lalc = LedaFits('data/test_lalc.LA')
-    lalc.exportFitsidi('data/test_lalc_direct.fitsidi', '../config/config.xml')
+    lalc = LedaFits()
+    lalc.filename = 'data/test_lalc.LA'
+    lalc.readLfile(n_ant=256, n_chans=109)
+
+    lalc.exportFitsidi('data/test_lalc_direct.fitsidi')
     uvf  = LedaFits('data/test_lalc_direct.fitsidi')
 
     ok_count = 0
@@ -51,7 +62,10 @@ def test_lalc():
 
 def test_lalc_json():
 
-    lalc = LedaFits('data/test_lalc.LA')
+    lalc = LedaFits()
+    lalc.filename = 'data/test_lalc.LA'
+    lalc.readLfile(n_ant=256, n_chans=109)
+
     lalc.readJson('data/test_lalc_json/d_antenna.json')
     lalc.generateUVW()
     uu = lalc.d_uv_data["UU"]
@@ -90,7 +104,9 @@ def test_lalc_json():
     #plt.show()
 
 def test_compare_idi_lalc_json():
-    lalc = LedaFits('data/test_lalc.LA')
+    lalc = LedaFits()
+    lalc.filename = 'data/test_lalc.LA'
+    lalc.readLfile(n_ant=256, n_chans=109)
     lalc.readJson('data/test_lalc_json/d_antenna.json')
     lalc.generateUVW()
 
@@ -130,12 +146,12 @@ def test_compare_cyg_lalc():
 def remove_miriad_lalc():
     uvf = LedaFits('data/test_lalc.fitsidi')
     uvf.remove_miriad_baselines()
-    uvf.exportFitsidi('data/test_lalc_255.fitsidi', '../config/config.xml')
+    uvf.exportFitsidi('data/test_lalc_255.fitsidi')
 
 if __name__ == '__main__':
 
     remove_miriad_lalc()
-    #test_lalc()
-    #test_lalc_json()
-    #test_compare_idi_lalc_json()
-    #test_compare_cyg_lalc()
+    test_lalc()
+    test_lalc_json()
+    test_compare_idi_lalc_json()
+    test_compare_cyg_lalc()

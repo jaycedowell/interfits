@@ -1,13 +1,47 @@
-from test_main import *
+from test_main import compare_dicts
+from interfits.interfits import InterFits, PrintLog
+from interfits.ledafits import LedaFits
+from interfits.lib.json_numpy import *
+import os
 import numpy as np
+import pylab as plt
+import time
+
+pp = PrintLog()
+h1 = pp.h1
+h2 = pp.h2
+
+import pprint
+ppp = pprint.PrettyPrinter(indent=4)
+ppp = ppp.pprint
+
+def test_json():    
+    npDict_orig = {
+        'ARRNAM'  : np.chararray([2]),
+        'CHICKEN' : np.array([ii for ii in range(128)]),
+        'STRING'  : 'qwertyuiop',
+        'LIST'    : [1,7,2,9]
+        }
+
+    # Dump to file
+    npDict_filename = 'data/jsontest.json'
+    dump_json(npDict_orig, npDict_filename)
+
+    # Load from file
+    npDict_ff = load_json(npDict_filename)
+
+    # Check the two dictionaries match
+    ok_count = 0
+    ok_count += compare_dicts(npDict_orig, npDict_ff)
+    assert ok_count == 1
 
 def create_json_uvfits():
-    filename_uvf  = 'data2/CygA_109ch.fitsidi'
+    filename_uvf  = 'data/test_lalc.fitsidi'
     uvf = InterFits(filename_uvf)
 
-    out_path = 'data2/CygA_json'
+    out_path = 'data/test_lalc_json'
     if not os.path.exists(out_path):
-        os.mkdir('data2/CygA_json')
+        os.mkdir('data/test_lalc_json')
 
     dump_json(uvf.h_antenna, os.path.join(out_path, 'h_antenna.json'))
     dump_json(uvf.h_array_geometry, os.path.join(out_path, 'h_array_geometry.json'))
@@ -24,8 +58,8 @@ def create_json_uvfits():
     # dump_json(uvf.d_uv_data) # DONT DUMP UVDATA - VERY LARGE!
 
 def compare_json_uvfits():
-    filename_uvf  = 'data2/CygA_109ch.fitsidi'
-    filename_json = 'data2/CygA_json/h_antenna.json'
+    filename_uvf  = 'data/test_lalc.fitsidi'
+    filename_json = 'data/test_lalc_json/h_antenna.json'
 
     uvf = InterFits(filename_uvf)
     idi = InterFits(filename_json)
@@ -77,12 +111,8 @@ def compare_json_uvfits():
 
     print "PASS: Comparison test passed"
 
-#def remove_miriad_lalc():
-#    uvf = LedaFits('data/test_lalc.fitsidi')
-#    uvf.remove_miriad_baselines()
-#    uvf.exportFitsidi('data/test_lalc_255.fitsidi', '../config/config.xml')
-
 if __name__ == '__main__':
 
+    test_json()
     create_json_uvfits()
     compare_json_uvfits()
