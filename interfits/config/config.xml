@@ -312,6 +312,35 @@
     <EXTNAME>'FLAG'</EXTNAME>
   </FLAG>
 
+  
+  <!-- 
+  
+  BANDPASS table header
+  ===================
+  
+  The BANDPASS table specified the bandpass response for each antenna. It is 
+  an optional table.
+  
+  -->
+  
+  <BANDPASS>
+    <EXTNAME>'BANDPASS'</EXTNAME>
+  </BANDPASS>
+
+  <!-- 
+  
+  CALIBRATION table header
+  ===================
+  
+  The CALIBRATION tables hold information about the delays applied to the 
+  visibilities. It is an optional table.
+  
+  -->
+  
+  <CALIBRATION>
+    <EXTNAME>'CALIBRATION'</EXTNAME>
+  </CALIBRATION>
+
   <!-- 
   
   UV_DATA table header

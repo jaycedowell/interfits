@@ -40,8 +40,15 @@ def main(args):
 	print "JD: %.3f" % jd
 	
 	print "Reading in FITS IDI data"
-	nSets = idi.totalBaselineCount / (nStand*(nStand+1)/2)
-	
+	try:
+		nSets = idi.integrationCount
+	except AttributeError:
+		hdulist = pyfits.open(filename)
+		uvData = hdulist['UV_DATA']
+		jd = uvData.data['DATE'] + uvData.data['TIME']
+		nSets = len(numpy.unique(jd))
+		hdulist.close()
+		
 	autocorrsXX = []
 	autocorrsYY = []
 	for set in range(1, nSets+1):
@@ -73,13 +80,19 @@ def main(args):
 	for i in xrange(32):
 		ax = fig.add_subplot(8, 8, 2*i+1)
 		for j in xrange(autocorrsXX.shape[0]):
-			ax.plot(freq/1e6, numpy.log10(numpy.abs(autocorrsXX[j,i])**2)*10)
+			try:
+				ax.plot(freq/1e6, numpy.log10(numpy.abs(autocorrsXX[j,i])**2)*10)
+			except TypeError:
+				pass
 			ax.set_title("%i X" % (idi.stands[i],))
 			ax.set_ylim([140, 190])
 			
 		ax = fig.add_subplot(8, 8, 2*i+2)
 		for j in xrange(autocorrsYY.shape[0]):
-			ax.plot(freq/1e6, numpy.log10(numpy.abs(autocorrsYY[j,i])**2)*10)
+			try:
+				ax.plot(freq/1e6, numpy.log10(numpy.abs(autocorrsYY[j,i])**2)*10)
+			except TypeError:
+				pass
 			ax.set_title("%i Y" % (idi.stands[i],))
 			ax.set_ylim([140, 190])
 	plt.show()

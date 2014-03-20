@@ -208,8 +208,15 @@ def main(args):
 	print "Polarization Products: %i starting with %i" % (len(idi.pols), idi.pols[0])
 	
 	print "Reading in FITS IDI data"
-	nSets = idi.totalBaselineCount / (nStand*(nStand+1)/2)
-	
+	try:
+		nSets = idi.integrationCount
+	except AttributeError:
+		hdulist = pyfits.open(filename)
+		uvData = hdulist['UV_DATA']
+		jd = uvData.data['DATE'] + uvData.data['TIME']
+		nSets = len(numpy.unique(jd))
+		hdulist.close()
+		
 	# "Bad" baselines
 	badBaselines = []
 	for i in xrange(nStand):
