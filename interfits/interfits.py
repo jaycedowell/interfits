@@ -145,6 +145,8 @@ class InterFits(object):
                 self.readDada(header_dict=head, data_arr=data)
             else:
                 file_ext = os.path.splitext(filename)[1][1:]
+                if file_ext[:5] == 'FITS_':
+                     file_ext = 'FITS_1'
                 self._readFile(file_ext)
 
 
