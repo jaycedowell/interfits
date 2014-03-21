@@ -229,10 +229,6 @@ def main(args):
 			if std1 in (35, 257, 259) or std2 in (35, 257, 259):
 				badBaselines.append(bl)
 				
-			# Currently disconnected
-			if std1 in (108,) or std2 in (108,):
-				badBaselines.append(bl)
-				
 			# ASP RJ45 antenna pairs that may have an enhanced DC component
 			if i != j and i/2 == j/2:
 				badBaselines.append(bl)
