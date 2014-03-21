@@ -844,7 +844,7 @@ class InterFits(object):
 
         if dump_uv_data:
             if getattr(self, "baselineList", None) is not None:
-                sel = self.baselineList
+                sel = self._baselineList
                 dump_json(self.d_uv_data[sel,:], os.path.join(dirname_out, 'd_uv_data.json'))
             else:
                 dump_json(self.d_uv_data, os.path.join(dirname_out, 'd_uv_data.json'))
@@ -859,7 +859,7 @@ class InterFits(object):
         self.hdf = h5py.File(filename_out, "w")
         
         if getattr(self, "baselineList", None) is not None:
-             sel = self.baselineList
+             sel = self._baselineList
              ifds = [self.h_antenna, self.h_source, self.h_array_geometry, self.h_frequency, self.h_uv_data,
                      self.d_antenna, self.d_source, self.d_array_geometry, self.d_frequency, self.d_uv_data[sel,:],
                      self.h_common, self.h_params]
@@ -951,7 +951,7 @@ class InterFits(object):
 
         # TODO: Fix time and date to Julian date
         if getattr(self, "baselineList", None) is not None:
-            sel = self.baselineList
+            sel = self._baselineList
             num_rows = self.d_uv_data['FLUX'][sel,:].shape[0]
             tbl_uv_data = make_uv_data(config=config_xml, num_rows=num_rows,
                                       uu_data=uvd['UU'][sel], vv_data=uvd['VV'][sel], ww_data=uvd['WW'][sel],
@@ -1453,7 +1453,7 @@ class InterFits(object):
         
         # Update the selection criteria
         try:
-             self.setBaselines(self.baselineSelectionCriteria)
+             self.select_baselines(self._baselineSelectionCriteria)
         except AttributeError:
              pass
         
@@ -1462,19 +1462,19 @@ class InterFits(object):
         'all' is specified, export all baselines."""
         
         # Preserve the state
-        self.baselineSelectionCriteria = blsToKeep
+        self._baselineSelectionCriteria = blsToKeep
         
         if type(blsToKeep) == str:
             if blsToKeep.lower() == 'all':
                  # If 'all' is specified, keep all baselines
-                 self.baselineList = None
+                 self._baselineList = None
         else:
             # Otherwise loop through the integrations and figure out which 
             # ones to keep.
-            self.baselineList = []
+            self._baselineList = []
             bls = self.d_uv_data["BASELINE"]
             for i,bl in enumerate(bls):
                 if bl in blsToKeep:
-                    self.baselineList.append(i)
+                    self._baselineList.append(i)
                     
         

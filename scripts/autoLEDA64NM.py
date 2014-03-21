@@ -8,6 +8,7 @@ Script to plot the autocorrelations in a LEDA64-NM FITS-IDI file.
 import os
 import sys
 import numpy
+import getopt
 import pyfits
 from datetime import datetime
 
@@ -18,9 +19,53 @@ from lsl.common.progress import ProgressBar
 import matplotlib.pyplot as plt
 
 
+def usage(exitCode=None):
+	print """autoLEDA64NM.py - Plot the XX and YY autocorrelations in a LEDA64-NM FITS-IDI file
+
+Usage: autoLEDA64NM.py [OPTIONS] file
+
+Options:
+-h, --help             Display this help information
+
+"""
+	
+	if exitCode is not None:
+		sys.exit(exitCode)
+	else:
+		return True
+
+
+def parseConfig(args):
+	config = {}
+	# Command line flags - default values
+	config['args'] = []
+	
+	# Read in and process the command line flags
+	try:
+		opts, arg = getopt.getopt(args, "h", ["help",])
+	except getopt.GetoptError, err:
+		# Print help information and exit:
+		print str(err) # will print something like "option -a not recognized"
+		usage(exitCode=2)
+	
+	# Work through opts
+	for opt, value in opts:
+		if opt in ('-h', '--help'):
+			usage(exitCode=0)
+		else:
+			assert False
+			
+	# Add in arguments
+	config['args'] = arg
+	
+	# Return configuration
+	return config
+
+
 def main(args):
-	# Grab the filename and open the FITS file using PyFits
-	filename = args[0]
+	# Parse the command line
+	config = parseConfig(args)
+	filename = config['args'][0]
 	
 	idi = utils.CorrelatedData(filename)
 	aa = idi.getAntennaArray()
