@@ -65,8 +65,9 @@ class InterFits(object):
     """ InterFits: UV-data interchange class
     """
 
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, verbose=True):
         self.filename = filename
+        self.verbose = verbose
 
         # Set up some basic details
         self.telescope = ""
@@ -179,11 +180,12 @@ class InterFits(object):
         site.lon  = long * 180 / np.pi
         site.lat  = lat * 180 / np.pi
         site.elev = elev
-
-        print "Telescope: %s"%self.telescope
-        print "Latitude:  %s"%self.site.lat
-        print "Longitude: %s"%self.site.long
-        print "Elevation: %s"%self.site.elev
+        
+        if self.verbose:
+            print "Telescope: %s"%self.telescope
+            print "Latitude:  %s"%self.site.lat
+            print "Longitude: %s"%self.site.long
+            print "Elevation: %s"%self.site.elev
 
     def readError(self):
         """ Raise an error if file cannot be read """
@@ -263,12 +265,13 @@ class InterFits(object):
         self.source = self.uvhead['OBJECT'].strip()
         self.date_obs = self.uvhead['DATE-OBS'].strip()
         self.n_ant = self.antdata.shape[0]
-
-        print self.fits.info()
-        print "Telescope:  %s" % self.telescope
-        print "Instrument: %s" % self.instrument
-        print "Object:     %s" % self.source
-        print "Date obs:   %s" % self.date_obs
+        
+        if self.verbose:
+            print self.fits.info()
+            print "Telescope:  %s" % self.telescope
+            print "Instrument: %s" % self.instrument
+            print "Object:     %s" % self.source
+            print "Date obs:   %s" % self.date_obs
 
         # Load array geometry data
         h2("Loading array geometry")
@@ -348,12 +351,13 @@ class InterFits(object):
         # Should have 7 axes, likely
         if len(s) != 7:
             if len(s) == 6:
-                print "Reshaping uv-data..."
+                if self.verbose:
+                    print "Reshaping uv-data..."
                 new_shape = (s[0], s[1], s[2], 1, s[3], s[4], s[5])
                 s = new_shape
                 self.d_uv_data['DATA'] = self.uvdata['DATA'].reshape(new_shape)
             else:
-                print "ERROR: Data axis not understood, incorrect length"
+                print "\tERROR: Data axis not understood, incorrect length"
                 print c
                 raise
         else:
@@ -362,7 +366,8 @@ class InterFits(object):
 
         # Best line in the history of indexing below
         # Note the 0:2 and *2 at the end is to not include weights
-        print "Converting DATA column to FLUX convention..."
+        if self.verbose:
+            print "Converting DATA column to FLUX convention..."
         self.d_uv_data['FLUX'] = self.d_uv_data['DATA'][..., 0:2].astype('float32').reshape(s[0], s[4] * s[5] * 2)
 
         self.h_params["NSTOKES"] = len(self.stokes_vals)
@@ -373,9 +378,9 @@ class InterFits(object):
 
         num_rows = self.d_uv_data['FLUX'].shape[0]
 
-        print "NOTE: Setting INTTIM to 1.0 (not supplied by uvfits)."
-        print "NOTE: Setting FREQID to 1 (for FITS-IDI tables)"
-        print "NOTE: Setting SOURCE to 1 (for FITS-IDI tables)"
+        print "\tNOTE: Setting INTTIM to 1.0 (not supplied by uvfits)."
+        print "\tNOTE: Setting FREQID to 1 (for FITS-IDI tables)"
+        print "\tNOTE: Setting SOURCE to 1 (for FITS-IDI tables)"
         self.d_uv_data['INTTIM'] = np.ones(num_rows)
         self.d_uv_data['FREQID'] = np.ones(num_rows)
         self.d_uv_data['SOURCE'] = np.ones(num_rows)
@@ -424,7 +429,7 @@ class InterFits(object):
                     self.tbl_flag = tbl
                     opt_tbl_flag = True
                 else:
-                    print "Warning: %s not recognized" % tbl.header["EXTNAME"]
+                    print "\tWARNING: %s not recognized" % tbl.header["EXTNAME"]
             except KeyError:
                 pass
 
@@ -437,10 +442,10 @@ class InterFits(object):
             except AttributeError:
                 self.date_obs = 0.0
             except KeyError:
-                print "Warning: DATE-OBS keyword not found in UV_DATA header"
+                print "\tWARNING: DATE-OBS keyword not found in UV_DATA header"
                 try:
                     self.date_obs = self.tbl_uv_data.header['RDATE'].strip()
-                    print "Warning: Using RDATE instead of DATE-OBS (not found)"
+                    print "\tWARNING: Using RDATE instead of DATE-OBS (not found)"
                 except KeyError:
                     self.date_obs = 0.0
 
@@ -450,7 +455,7 @@ class InterFits(object):
         self.source = str(self.tbl_source.data['SOURCE'][0]).lstrip("\"[\'").rstrip("\']\"")
         self.n_ant = self.tbl_antenna.data.shape[0]
 
-        if from_file:
+        if from_file and self.verbose:
             print self.fits.info()
             print "Telescope:  %s" % self.telescope
             print "Instrument: %s" % self.instrument
@@ -470,7 +475,7 @@ class InterFits(object):
         # Load antenna table data
         h2("Loading antenna table")
         an_keywords = ['NOPCAL']
-        an_data = ['POLTYA', 'POLAA', 'POLCALA', 'POLTYB', 'POLAB', ' POLCALB']
+        an_data = ['POLTYA', 'POLAA', 'POLCALA', 'POLTYB', 'POLAB', 'POLCALB']
         for k in an_keywords: self.h_antenna[k] = self.tbl_antenna.header[k]
         for k in an_data:
             try:
@@ -588,62 +593,62 @@ class InterFits(object):
             self.h_common = load_json(os.path.join(filepath, 'h_common.json'))
             self.h_params = load_json(os.path.join(filepath, 'h_params.json'))
         except IOError:
-            print "Warning: Could not load common keywords"
+            print "\tWARNING: Could not load common keywords"
         try:
             h2("Loading antenna table")
             self.h_antenna = load_json(os.path.join(filepath, 'h_antenna.json'))
             self.d_antenna = load_json(os.path.join(filepath, 'd_antenna.json'))
         except IOError:
-            print "Warning: Could not load antenna table"
+            print "\tWARNING: Could not load antenna table"
         try:
             h2("Loading frequency table")
             self.h_frequency = load_json(os.path.join(filepath, 'h_frequency.json'))
             self.d_frequency = load_json(os.path.join(filepath, 'd_frequency.json'))
         except IOError:
-            print "Warning: Could not load frequency table"
+            print "\tWARNING: Could not load frequency table"
         try:
             h2("Loading array geometry table")
             self.h_array_geometry = load_json(os.path.join(filepath, 'h_array_geometry.json'))
             self.d_array_geometry = load_json(os.path.join(filepath, 'd_array_geometry.json'))
         except IOError:
-            print "Warning: Could not load array geometry table"
+            print "\tWARNING: Could not load array geometry table"
         try:
             h2("Loading source table")
             self.h_source = load_json(os.path.join(filepath, 'h_source.json'))
             self.d_source = load_json(os.path.join(filepath, 'd_source.json'))
         except IOError:
-            print "Warning: Could not load frequency table"
+            print "\tWARNING: Could not load frequency table"
         try:
             h2("Loading UV_DATA (header)")
             self.h_uv_data = load_json(os.path.join(filepath, 'h_uv_data.json'))
         except IOError:
-            print "Warning: Could not load UV_DATA table header"
+            print "\tWARNING: Could not load UV_DATA table header"
         try:
             h2("Loading FLAG")
             self.h_flag = load_json(os.path.join(filepath, 'h_flag.json'))
             self.d_flag = load_json(os.path.join(filepath, 'd_flag.json'))
         except IOError:
-            print "Warning: Could not load UV_DATA table header"
+            print "\tWARNING: Could not load UV_DATA table header"
 
         try:
             self.telescope = self.h_uv_data['TELESCOP']
         except KeyError:
-            print "Warning: Could not load TELESCOP from UV_DATA header"
+            print "\tWARNING: Could not load TELESCOP from UV_DATA header"
         try:
             self.date_obs = self.h_uv_data['DATE-OBS']
         except KeyError:
-            print "Warning: Could not load DATE-OBS from UV_DATA header"
+            print "\tWARNING: Could not load DATE-OBS from UV_DATA header"
         try:
             s = self.d_source['SOURCE']
             if type(s) is list:
                 s = str(s[0])
             self.source = s
         except KeyError:
-            print "Warning: Could not load SOURCE from UV_DATA header"
+            print "\tWARNING: Could not load SOURCE from UV_DATA header"
         try:
             self.instrument = self.h_array_geometry['ARRNAM']
         except KeyError:
-            print "Warning: Could not load ARRNAM from UV_DATA header"
+            print "\tWARNING: Could not load ARRNAM from UV_DATA header"
 
 
     def readHdf5(self):
@@ -666,7 +671,7 @@ class InterFits(object):
                 if ifd_name in self.hdf.keys():
                     h2("Reading %s" % ifd_name)
                     h5d = self.hdf[ifd_name]
-                    print h5d
+                    #print h5d
                     for key in h5d.keys():
                         if ifd_name.startswith("h_"):
                             # Convert back to native types from numpy types
@@ -713,7 +718,7 @@ class InterFits(object):
                 value = "'" + value.strip("'") + "'"
             self.xmlroot.find(table).find(keyword).text = str(value)
         except:
-            print "Error: Something went wrong with XML parsing"
+            print "\tERROR: Something went wrong with XML parsing"
             print "%s, %s, %s" % (table, keyword, value)
 
     def s2arr(self, val):
@@ -889,7 +894,7 @@ class InterFits(object):
                     hgroup.create_dataset(key, data=ifd[key])
         self.hdf.close()
 
-    def exportFitsidi(self, filename_out, config_xml=None, verbose=False):
+    def exportFitsidi(self, filename_out, config_xml=None):
         """ Export data as FITS IDI 
         
         filename_out (str): output filename
@@ -909,31 +914,31 @@ class InterFits(object):
 
         h2('Creating Primary HDU')
         hdu_primary = make_primary(config=config_xml)
-        if verbose: print hdu_primary.header.ascardlist()
+        if self.verbose: print hdu_primary.header.ascardlist()
 
         h2('Creating ARRAY_GEOMETRY')
         tbl_array_geometry = make_array_geometry(config=config_xml, num_rows=self.n_ant)
-        if verbose: print tbl_array_geometry.header.ascardlist()
+        if self.verbose: print tbl_array_geometry.header.ascardlist()
 
         h2('Creating ANTENNA')
         tbl_antenna = make_antenna(config=config_xml, num_rows=self.n_ant)
-        if verbose: print tbl_antenna.header.ascardlist()
+        if self.verbose: print tbl_antenna.header.ascardlist()
 
         h2('Creating FREQUENCY')
         tbl_frequency = make_frequency(config=config_xml, num_rows=1)
-        if verbose: print tbl_frequency.header.ascardlist()
+        if self.verbose: print tbl_frequency.header.ascardlist()
 
         h2('Creating SOURCE')
         tbl_source = make_source(config=config_xml, num_rows=1)
-        if verbose: print tbl_source.header.ascardlist()
+        if self.verbose: print tbl_source.header.ascardlist()
         
         if getattr(self, 'delaysApplied', None) is not None:
             h2('Creating CALIBRATION')
             delayA = self.delaysApplied[:,0]
             delayB = self.delaysApplied[:,1]
             tbl_calibration = make_calibration(config=config_xml, num_rows=self.n_ant, 
-                                               delaya_data=delayA, delayb_data=delayB)
-            if verbose: print tbl_calibration.header.ascardlist()
+                                               date=self.delaysCalibrated, delaya_data=delayA, delayb_data=delayB)
+            if self.verbose: print tbl_calibration.header.ascardlist()
         else:
             tbl_calibration = None
 
@@ -945,7 +950,7 @@ class InterFits(object):
         try:
             jtime = uvd['TIME']
         except KeyError:
-            print "\t Warning: TIME column does not exist."
+            print "\tWARNING: TIME column does not exist."
             jtime = None
 
 
@@ -970,7 +975,7 @@ class InterFits(object):
                                    inttim_data=uvd['INTTIM'],
                                    weights_data=None, flux_data=uvd['FLUX'], weights_col=False)
 
-        if verbose: print tbl_uv_data.header.ascardlist()
+        if self.verbose: print tbl_uv_data.header.ascardlist()
 
         if self.write_flags:
             n_rows_flag = 0
@@ -979,7 +984,7 @@ class InterFits(object):
             if n_rows_flag > 0:
                 h2('Creating FLAG')
                 tbl_flag = make_flag(config=config_xml, num_rows=n_rows_flag)
-                if verbose: print tbl_flag.header.ascardlist()
+                if self.verbose: print tbl_flag.header.ascardlist()
 
         h2('Filling in data')
         h3("ARRAY_GEOMETRY")
@@ -999,7 +1004,7 @@ class InterFits(object):
                     tbl_antenna.data['NO_LEVELS'][i] = 255
                     tbl_antenna.data[k][i] = self.d_antenna[k][i]
                 except:
-                    print "Warning: keyword error: %s" % k
+                    print "\tWARNING: keyword error: %s" % k
 
         h3("FREQUENCY")
         tbl_frequency.data["FREQID"][0] = 1
@@ -1015,7 +1020,7 @@ class InterFits(object):
                     tbl_source.data['EQUINOX'][0] = 'J2000'
                     tbl_source.data[k][0] = self.d_source[k]
                 except:
-                    print "Warning: keyword error: %s" % k
+                    print "\tWARNING: keyword error: %s" % k
                     raise
         else:
             n_rows = len(self.d_source['SOURCE'])
@@ -1027,7 +1032,7 @@ class InterFits(object):
                     try:
                         tbl_source.data[k][i] = self.d_source[k][i]
                     except:
-                        print "Warning: keyword error: %s" % k
+                        print "\tWARNING: keyword error: %s" % k
         if tbl_calibration is not None:
             h3("CALIBRATION")
             h3("(Pre-filled)")
@@ -1054,7 +1059,7 @@ class InterFits(object):
                         try:
                             tbl_flag.data[k][i] = self.d_flag[k][i]
                         except:
-                            print "Warning: keyword error: %s" % k
+                            print "\tWARNING: keyword error: %s" % k
 
         # Add history and comments to header
         hdu_primary.header.add_comment("FITS-IDI: FITS Interferometry Data Interchange Convention")
@@ -1076,9 +1081,9 @@ class InterFits(object):
         if self.write_flags and n_rows_flag > 0:
             hdus.append(tbl_flag)
         hdulist = pf.HDUList(hdus)
-        print hdulist.info()
+        if self.verbose: print hdulist.info()
 
-        print '\nVerifying integrity...'
+        if self.verbose: print '\nVerifying integrity...'
         hdulist.verify()
 
         if os.path.isfile(filename_out):
@@ -1090,7 +1095,7 @@ class InterFits(object):
     def verify_baseline_order(self):
         """ Check baseline IDs are in order """
 
-        print "Verification: Checking uv_data baseline order..."
+        if self.verbose: print "Verification: Checking uv_data baseline order..."
 
         bls = [int(b) for b in self.d_uv_data['BASELINE']]
 
@@ -1136,7 +1141,7 @@ class InterFits(object):
 
     def verify_uv_table(self):
         """ Basic diagnostics on UV_DATA table """
-        print "Verification: checking UV_DATA for null entries"
+        if self.verbose: print "Verification: checking UV_DATA for null entries"
 
         freq_ids   = self.d_uv_data["FREQID"]
         source_ids = self.d_uv_data["SOURCE"]
@@ -1203,7 +1208,7 @@ class InterFits(object):
             assert ref_delt > 0
         except Exception, e:
             print "CHAN_BW: %s\n REF_PIXL: %s\n REF_FREQ: %s\n NO_CHAN %s"%(ref_delt, ref_pix, ref_val, num_pix)
-            print "Error: %s" % str(e)
+            print "\tERROR: %s" % str(e)
             raise ValueError("Frequency values are fubarred.")
 
         return freqs

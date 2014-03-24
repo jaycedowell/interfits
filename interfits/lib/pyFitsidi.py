@@ -1093,7 +1093,7 @@ def make_baseline():
     pass
 
 
-def make_calibration():
+def make_calibration(config='config.xml', num_rows=1, date=None, delaya_data=None, phasea_data=None, delayb_data=None, phaseb_data=None):
     """ Make calibration table
   
     From the FITS IDI documentation:
@@ -1103,9 +1103,59 @@ def make_calibration():
     In fact, it is not at all clear what the intentions were in the case of some of the
     columns specified for this table.
 
-      This table is currently not supported (on the very bottom of the todo list)
+    Notes
+    -----
+    Table is built with the following LEDA-specific columns:
+    
+    * ANTENNA_NO: Antenna ID number for station
+    * ARRAY:      Array ID number
+    * DELAY_A:    Delay in seconds applied to the A polarization antenna
+    * PHASE_A     Phse in radians applied to the A polarization antenna
+    * DELAY_B:    Delay in seconds applied to the B polarization antenna
+    * PHASE_B     Phse in radians applied to the B polarization antenna
+    
+    Parameters
+    ----------
+    config: string
+      filename of xml configuration file, defaults to 'config,xml'
+    num_rows: int
+      number of rows to generate. Rows will be filled with numpy zeros.
+    delaya_data: float32
+      delays in seconds applied to each A polarization antenna
+    delayb_data: float32
+      delays in seconds applied to each B polarization antenna
     """
-    pass
+
+    # Generate headers from config file and update it with the delay calibration date
+    params = parseConfig('PARAMETERS', config)
+    cards = parseConfig('CALIBRATION', config)
+    common = parseConfig('COMMON', config)
+    if date != None:
+        cards['DATE-GEN'] = date
+    
+    an_data = np.arange(1, num_rows+1)
+    ar_data = np.ones(num_rows)
+    if delaya_data == None: delaya_data = np.zeros(num_rows)
+    if phasea_data == None: phasea_data = np.zeros(num_rows)
+    if delayb_data == None: delayb_data = np.zeros(num_rows)
+    if phaseb_data == None: phaseb_data = np.zeros(num_rows)
+    
+    c = []
+    c.append(pf.Column(name='ANTENNA_NO', format='1J', array=an_data.astype(np.int32)))
+    c.append(pf.Column(name='ARRAY', format='1J', array=ar_data.astype(np.int32)))
+    c.append(pf.Column(name='DELAY_A', format='1E', array=delaya_data.astype(np.float32)))
+    c.append(pf.Column(name='PHASE_A', format='1E', array=phasea_data.astype(np.float32)))
+    c.append(pf.Column(name='DELAY_B', format='1E', array=delayb_data.astype(np.float32)))
+    c.append(pf.Column(name='PHASE_B', format='1E', array=phaseb_data.astype(np.float32)))
+    
+    coldefs = pf.ColDefs(c)
+    tblhdu = pf.new_table(coldefs)
+    
+    for key in cards: tblhdu.header.update(key, cards[key])
+    for key in common: tblhdu.header.update(key, common[key])
+    tblhdu.header.update('DATE-GEN', date)
+    
+    return tblhdu
 
 
 def make_model_comps():

@@ -229,7 +229,7 @@ def main(args):
 	# Inspect the files to try and figure out what is what
 	metadataList = []
 	for filename in filenames:
-		uvw = LedaFits()
+		uvw = LedaFits(verbose=False)
 		metadataList.append( (filename, uvw.inspectFile(filename)) )
 		
 	# Group the files by start time and save the filenames and frequency ranges
@@ -301,8 +301,7 @@ def main(args):
 		## Read in the files
 		uvws = []
 		for filename in group[1]:
-			uvws.append( LedaFits(filename) )
-			print uvws[-1].d_uv_data["FLUX"].dtype
+			uvws.append( LedaFits(filename, verbose=False) )
 			
 		## Build the output name
 		obsDate = datetime.strptime(uvws[0].date_obs, "%Y-%m-%dT%H:%M:%S")

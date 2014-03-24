@@ -102,13 +102,15 @@ class LedaFits(InterFits):
         lfa = np.fromfile(filename + '.LA', dtype='float32')
         lfa = lfa.reshape([len(lfa) / n_chans / n_antpol, n_antpol, n_chans, 1])
         lfa = np.concatenate((lfa, np.zeros_like(lfa)), axis=3)
-        print lfa.shape
+        if self.verbose:
+            print "LFA shape:", lfa.shape
 
         # Cross-corrs
         #h2("Opening cross-corrs (.LC)")
         lfc = np.fromfile(filename + '.LC', dtype='float32')
         lfc = lfc.reshape([len(lfc) / n_chans / n_blcc / 2, n_blcc, n_chans, 2])
-        print lfc.shape
+        if self.verbose:
+            print "LFC shape:", lfc.shape
 
         #h2("Forming visibility matrix")
         # Create a visibility matrix, and use indexing to populate upper triangle
@@ -121,7 +123,8 @@ class LedaFits(InterFits):
             LinePrint("%i of %i" % (ii, vis.shape[0]))
             vis[ii][iup] = lfc[ii]
             vis[ii][idiag] = lfa[ii]
-        print "\n", vis.shape
+        if self.verbose:
+            print "vis shape:", vis.shape
 
         return vis
 
@@ -166,7 +169,7 @@ class LedaFits(InterFits):
         try:
             self.xmlData = etree.parse(config_xml)
         except IOError:
-            print "ERROR: Cannot open %s" % config_xml
+            print "\tERROR: Cannot open %s" % config_xml
             exit()
 
         # Load visibility data
@@ -323,10 +326,11 @@ class LedaFits(InterFits):
             dt_obj      = dt_obj + timedelta(seconds=time_offset)
             date_obs    = dt_obj.strftime("%Y-%m-%dT%H:%M:%S")
             dd_obs      = dt_obj.strftime("%Y-%m-%d")
-
-            print "UTC START:   %s"%d.header["UTC_START"]
-            print "TIME OFFSET: %s"%timedelta(seconds=time_offset)
-            print "NEW START:   %s"%date_obs
+            
+            if self.verbose:
+                print "UTC START:   %s"%d.header["UTC_START"]
+                print "TIME OFFSET: %s"%timedelta(seconds=time_offset)
+                print "NEW START:   %s"%date_obs
 
             self.date_obs = date_obs
             self.h_params["NSTOKES"]  = 4
@@ -401,11 +405,12 @@ class LedaFits(InterFits):
             self.site.lon  = long * 180 / np.pi
             self.site.lat  = lat * 180 / np.pi
             self.site.elev = elev
-
-        print "Telescope: %s"%self.telescope
-        print "Latitude:  %s"%self.site.lat
-        print "Longitude: %s"%self.site.long
-        print "Elevation: %s"%self.site.elev
+        
+        if self.verbose:
+            print "Telescope: %s"%self.telescope
+            print "Latitude:  %s"%self.site.lat
+            print "Longitude: %s"%self.site.long
+            print "Elevation: %s"%self.site.elev
 
     def _vis_matrix_to_flux(self, vis, remap=False):
         """Convert a visibility matrix to FITS-IDI flux standard
@@ -708,8 +713,9 @@ class LedaFits(InterFits):
         site = self.site
         site.date = dt_utc
         lst, lst_deg = site.sidereal_time(), site.sidereal_time() / 2 / np.pi * 360
-        print "UTC: %s"%dt_utc
-        print "LST: %s (%s)"%(lst, lst_deg)
+        if self.verbose:
+            print "UTC: %s"%dt_utc
+            print "LST: %s (%s)"%(lst, lst_deg)
         return lst_deg
 
     def generateUVW(self, src='ZEN', update_src=True, conjugate=False, use_stored=False):
@@ -735,11 +741,12 @@ class LedaFits(InterFits):
         ra_deg, dec_deg, lst_deg, ha_deg = self._compute_lst_ha(src)
         H = np.deg2rad(ha_deg)
         d = np.deg2rad(dec_deg)
-
-        print "LST:        %2.3f deg"%lst_deg
-        print "Source RA:  %2.3f deg"%ra_deg
-        print "Source DEC: %2.3f deg"%dec_deg
-        print "HA:         %2.3f deg"%np.rad2deg(H)
+        
+        if self.verbose:
+            print "LST:        %2.3f deg"%lst_deg
+            print "Source RA:  %2.3f deg"%ra_deg
+            print "Source DEC: %2.3f deg"%dec_deg
+            print "HA:         %2.3f deg"%np.rad2deg(H)
 
         try:
             assert H < 2 * np.pi and d < 2 * np.pi
@@ -996,14 +1003,18 @@ class LedaFits(InterFits):
         tdelts = els / sol
 
         if debug:
+            print "Date Generated:", self.z_elength['DATE-GEN']
+            print ""
             print "X-POL (ns)  \tY-POL (ns)"
             for line in tdelts:
                 print "%2.2f   \t%2.2f"%(line[0]*1e9, line[1]*1e9)
                 
         # Store the delays applied for future use
         try:
+             self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied += tdelts
         except AttributeError:
+             self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied = tdelts
              
         # Generate frequency array from metadata
