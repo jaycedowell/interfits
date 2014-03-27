@@ -117,6 +117,7 @@ def getAllBaselines(ifi):
 	"""
 	
 	bls, ant_arr = coords.generateBaselineIds(ifi.n_ant)
+	#print '@@', 'FR', len(bls)
 	return bls
 
 
@@ -151,6 +152,7 @@ def getTotalPowerBaselines(ifi, stands=[35, 257, 258, 259, 260]):
 				blsToKeep.append( bls[i] )
 				
 	# Done
+	#print '@@', 'TP', len(blsToKeep)
 	return blsToKeep
 
 
@@ -185,6 +187,7 @@ def getSwitchingBaselines(ifi, stands=[35, 257, 259]):
 				blsToKeep.append( bls[i] )
 				
 	# Done
+	#print '@@', 'SW', len(blsToKeep)
 	return blsToKeep
 
 
@@ -218,6 +221,7 @@ def getStaticBaselines(ifi, stands=[35, 257, 259]):
 			blsToKeep.append( bls[i] )
 			
 	# Done
+	#print '@@', 'AV', len(blsToKeep)
 	return blsToKeep
 
 

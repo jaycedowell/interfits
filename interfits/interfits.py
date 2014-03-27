@@ -848,7 +848,7 @@ class InterFits(object):
             dump_json(self.h_flag, os.path.join(dirname_out, 'h_flag.json'))
 
         if dump_uv_data:
-            if getattr(self, "baselineList", None) is not None:
+            if getattr(self, "_baselineList", None) is not None:
                 sel = self._baselineList
                 dump_json(self.d_uv_data[sel,:], os.path.join(dirname_out, 'd_uv_data.json'))
             else:
@@ -863,7 +863,7 @@ class InterFits(object):
         h1("Exporting to %s" % filename_out)
         self.hdf = h5py.File(filename_out, "w")
         
-        if getattr(self, "baselineList", None) is not None:
+        if getattr(self, "_baselineList", None) is not None:
              sel = self._baselineList
              ifds = [self.h_antenna, self.h_source, self.h_array_geometry, self.h_frequency, self.h_uv_data,
                      self.d_antenna, self.d_source, self.d_array_geometry, self.d_frequency, self.d_uv_data[sel,:],
@@ -955,7 +955,7 @@ class InterFits(object):
 
 
         # TODO: Fix time and date to Julian date
-        if getattr(self, "baselineList", None) is not None:
+        if getattr(self, "_baselineList", None) is not None:
             sel = self._baselineList
             num_rows = self.d_uv_data['FLUX'][sel,:].shape[0]
             tbl_uv_data = make_uv_data(config=config_xml, num_rows=num_rows,
