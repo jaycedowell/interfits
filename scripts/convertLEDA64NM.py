@@ -414,9 +414,9 @@ def main(args):
 			
 			### Decimate within a try...expect block to deal with bad decimation parameters
 			try:
-				uvws[0].average_time_frequency(config['tDecim'], config['sDecim'])
-			except RuntimeError, e:
-				print "ERROR: %s" % str(e)
+				uvws[0].average_time_frequency(config['tDecim'], config['sDecim'], mode='nearest')
+			except ValueError, e:
+				print "ERROR: %s, skipping" % str(e)
 				continue
 				
 			### Verify

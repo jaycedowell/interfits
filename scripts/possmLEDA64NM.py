@@ -142,7 +142,7 @@ def main(args):
 		for k in xrange(nFigs):
 			fig = plt.figure()
 			
-			for j in range(25):
+			for j in range(min([config['nBaselines'], 25])):
 				try:
 					stnd1, stnd2 = dataDict['bls'][config['pol']][i]
 					vis = dataDict['vis'][config['pol']][i]

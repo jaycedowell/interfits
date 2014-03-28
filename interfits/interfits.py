@@ -1331,15 +1331,28 @@ class InterFits(object):
             ts = ts[bls == bl_id]
             return ts, data
 
-    def average_time_frequency(self, temporalDecimation=1, spectralDecimation=1):
+    def average_time_frequency(self, temporalDecimation=1, spectralDecimation=1, mode='exact'):
         """Average down a dataset in time and/or frequency using the specified 
         temporal and spectral decimation factors.  This modifies the in-memory
         UV_DATA and adjusts the various header keywords as needed.
         
+        The keyword mode is used to set how the averaging is implemented.  The 
+        two modes are:
+          * exact - only data sets that have integration and channel counts 
+                    that are integer multiples of the decimation factors are
+                    averages;  all other result in a ValueError
+          * nearset - data sets that are not an integer multiple of the deci-
+                      mation factors are resized to the nearest multiple and
+                      then averaged
+                      
         .. note::
            If the data dimensions are not an integer multiple of the specified temporal 
-           or spectral decimation value a RuntimeError will be raised."""
+           or spectral decimation value a ValueError will be raised."""
         
+        # Validate the operating mode
+        if mode.lower() not in ('exact', 'nearest'):
+            raise ValueError("Unknown averaging mode '%s'" % mode)
+            
         # Generate frequency array from metadata
         freqs = self.formatFreqs()
         nFreq = freqs.size
@@ -1373,15 +1386,26 @@ class InterFits(object):
         nStk = flux.shape[1] / nFreq / nCmp
         
         # Validate what we are about to do
-        try:
-            assert nInt % temporalDecimation == 0
-        except:
-            raise ValueError("The number of integrations is not an integer multiple of the decimation amount")
-        try:
-            assert nFreq % spectralDecimation == 0
-        except:
-            raise ValueError("The number of integrations is not an integer multiple of the decimation amount")
-            
+        tKeep = (nInt / temporalDecimation) * temporalDecimation
+        fKeep = (nFreq / spectralDecimation) * spectralDecimation
+        if mode.lower() == 'exact':
+            if nInt % temporalDecimation != 0:
+                raise ValueError("The number of integrations is not an integer multiple of the decimation amount")
+            if nFreq % spectralDecimation != 0:
+                raise ValueError("The number of channels is not an integer multiple of the decimation amount")
+        else:
+            ## Files that just don't contain enough data
+            if tKeep == 0:
+                raise ValueError("There are fewer integrations than the decimation amount")
+            if fKeep == 0:
+                raise ValueError("There are fewer channels than the decimation amount")
+                
+            ## Files that contain enough data but where averaging will result in data loss
+            if nInt % temporalDecimation != 0:
+                print "\tWARNING: The number of integrations is not an integer multiple of the decimation amount"
+            if nFreq % spectralDecimation != 0:
+                print "\tWARNING: The number of channels is not an integer multiple of the decimation amount"
+                
         # Re-order and prepare for averaging
         uu.shape     = (nInt, nBL)
         vv.shape     = (nInt, nBL)
@@ -1395,6 +1419,18 @@ class InterFits(object):
         flux.shape   = (nInt, nBL, nFreq, nStk, nCmp)
         
         # Temporal averaging - setup
+        if nInt % temporalDecimation != 0:
+            ## Some trimming is needed
+            uu     = uu[:tKeep, :]
+            vv     = vv[:tKeep, :]
+            ww     = ww[:tKeep, :]
+            bls    = bls[:tKeep, :]
+            source = source[:tKeep, :]
+            freqid = freqid[:tKeep, :]
+            dObs   = dObs[:tKeep, :]
+            tObs   = tObs[:tKeep, :]
+            tInt   = tInt[:tKeep, :]
+            flux   = flux[:tKeep, :, :, :, :]
         uu.shape     = (nInt/temporalDecimation, temporalDecimation, nBL)
         vv.shape     = (nInt/temporalDecimation, temporalDecimation, nBL)
         ww.shape     = (nInt/temporalDecimation, temporalDecimation, nBL)
@@ -1419,6 +1455,9 @@ class InterFits(object):
         flux = flux.mean(axis=1)
         
         # Spectral averaging - setup
+        if nFreq % spectralDecimation != 0:
+            ## Some trimming is needed
+            flux = flux[:, :, :fKeep, :, :]
         flux.shape = (nInt/temporalDecimation, nBL, nFreq/spectralDecimation, spectralDecimation, nStk, nCmp)
         flux = flux.sum(axis=3)
         
