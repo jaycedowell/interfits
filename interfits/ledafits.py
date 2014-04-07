@@ -976,10 +976,10 @@ class LedaFits(InterFits):
                 phase_corrs = np.column_stack((p, p, p, p)).flatten()
                 flux[nn*len(bls) + ii] = flux[nn*len(bls) + ii] * phase_corrs
 
-            # Now we have applied geometric delays, we need to
-            # convert from viewing as complex to viewing as floats
-            assert flux.dtype == 'complex64'
-            self.d_uv_data["FLUX"] = flux.view('float32')
+        # Now we have applied geometric delays, we need to
+        # convert from viewing as complex to viewing as floats
+        assert flux.dtype == 'complex64'
+        self.d_uv_data["FLUX"] = flux.view('float32')
 
     def apply_cable_delays(self, debug=True):
         """ Apply antenna cable delays
@@ -1013,9 +1013,11 @@ class LedaFits(InterFits):
         try:
              self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied += tdelts
+             self.phasesApplied = numpy.zeros_like(self.delaysApplied)
         except AttributeError:
              self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied = tdelts
+             self.phasesApplied = numpy.zeros_like(self.delaysApplied)
              
         # Generate frequency array from metadata
         freqs = self.formatFreqs()

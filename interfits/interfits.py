@@ -413,6 +413,7 @@ class InterFits(object):
 
         # Match tables
         opt_tbl_flag = False # FLAG table optional
+        opt_tbl_calibration = False # CALIBRATION table optional
         for tbl in self.fits:
             try:
                 if tbl.header['EXTNAME'] == 'ARRAY_GEOMETRY':
@@ -428,6 +429,9 @@ class InterFits(object):
                 elif tbl.header['EXTNAME'] == 'FLAG':
                     self.tbl_flag = tbl
                     opt_tbl_flag = True
+                elif tbl.header['EXTNAME'] == 'CALIBRATION':
+                    self.tbl_calibration = tbl
+                    opt_tbl_calibration = True
                 else:
                     print "\tWARNING: %s not recognized" % tbl.header["EXTNAME"]
             except KeyError:
@@ -568,8 +572,23 @@ class InterFits(object):
                     self.d_frequency[k] = self.tbl_frequency.data[k]
                 except KeyError:
                     print "\tWARNING: %s key error raised." % k
-
-
+                    
+        if opt_tbl_calibration:
+            h2("Loading CALIBRATION table")
+            self.delaysCalibrated = self.tbl_calibration.header['DATE-GEN']
+            
+            delayA = self.tbl_calibration.data['DELAY_A']
+            delayB = self.tbl_calibration.data['DELAY_B']
+            self.delaysApplied = np.zeros((delayA.size, 2), dtype=delayA.dtype)
+            self.delaysApplied[:,0] = delayA
+            self.delaysApplied[:,1] = delayB
+            
+            phaseA = self.tbl_calibration.data['PHASE_A']
+            phaseB = self.tbl_calibration.data['PHASE_B']
+            self.phasesApplied = np.zeros((phaseA.size, 2), dtype=phaseA.dtype)
+            self.phasesApplied[:,0] = phaseA
+            self.phasesApplied[:,1] = phaseB
+            
     def readJson(self, filename=None):
         """ Read JSON data into InterFits dictionaries.
 
@@ -936,8 +955,11 @@ class InterFits(object):
             h2('Creating CALIBRATION')
             delayA = self.delaysApplied[:,0]
             delayB = self.delaysApplied[:,1]
+            phaseA = self.phasesApplied[:,0]
+            phaseB = self.phasesApplied[:,1]
             tbl_calibration = make_calibration(config=config_xml, num_rows=self.n_ant, 
-                                               date=self.delaysCalibrated, delaya_data=delayA, delayb_data=delayB)
+                                               date=self.delaysCalibrated, delaya_data=delayA, delayb_data=delayB, 
+                                               phasea_data=phaseA, phaseb_data=phaseB)
             if self.verbose: print tbl_calibration.header.ascardlist()
         else:
             tbl_calibration = None
