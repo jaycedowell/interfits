@@ -76,6 +76,6 @@ json_d_antenna_nm         = os.path.join(fileroot, 'config/leda64_nm/d_antenna.j
 json_antenna_el_lens_nm   = os.path.join(fileroot, 'config/leda64_nm/z_antenna_el_lens.json')
 
 # A few sources to phase to
-src_names = ['CYG', 'CAS', 'TAU', 'VIR']
-src_ras   = [299.86791, 350.84583, 83.63333, 187.705833]
-src_decs  = [40.733888, 58.810833, 22.01444, 12.39111]
+src_names = ['CYG', 'CygA', 'CAS', 'CasA', 'TAU', 'TauA', 'VIR', 'VirA']
+src_ras   = [299.86791, 299.86791, 350.84583, 350.84583, 83.63333, 83.63333, 187.705833, 187.705833]
+src_decs  = [40.733888, 40.733888, 58.810833, 58.810833, 22.01444, 22.01444,   12.39111,   12.39111]

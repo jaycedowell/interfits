@@ -726,10 +726,10 @@ class LedaFits(InterFits):
 
         src (str): Source to phase to. Sources are three capital letters:
             ZEN: Zenith (RA will be computed from timestamps)
-            CYG: Cygnus A
-            CAS: Cassiopeia A
-            TAU: Taurus A
-            VIR: Virgo A
+            CYG or CygA: Cygnus A
+            CAS or CasA: Cassiopeia A
+            TAU or TauA: Taurus A
+            VIR or VirA: Virgo A
 
         use_stored (bool): If True, uses stored UVW coordinates (does not recompute).
                            this is faster than recomputing.
@@ -936,10 +936,10 @@ class LedaFits(InterFits):
         ----------
         src (str): Source to phase to. Sources are three capital letters:
             ZEN: Zenith (RA will be computed from timestamps)
-            CYG: Cygnus A
-            CAS: Cassiopeia A
-            TAU: Taurus A
-            VIR: Virgo A
+            CYG or CygA: Cygnus A
+            CAS or CasA: Cassiopeia A
+            TAU or TauA: Taurus A
+            VIR or VirA: Virgo A
         generate_uvw (bool): Skip regeneration of UVW coords?
 
         """
