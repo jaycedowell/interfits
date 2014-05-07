@@ -843,6 +843,8 @@ class InterFits(object):
             name of directory to output files into.
         dump_uv_data: bool
             Dump UV DATA into a dictionary? Defaults to false as this is very large.
+        clobber: bool
+            Whether or not to overwrite the existing directory if it exists
         """
 
         if not os.path.exists(dirname_out):
@@ -885,6 +887,8 @@ class InterFits(object):
 
         filename_out: str
             name of output files into.
+        clobber: bool
+            Whether or not to overwrite the existing file if it exists
         """
         h1("Exporting to %s" % filename_out)
         if os.path.exists(filename_out):
@@ -930,9 +934,12 @@ class InterFits(object):
     def exportFitsidi(self, filename_out, config_xml=None, clobber=False):
         """ Export data as FITS IDI 
         
-        filename_out (str): output filename
-        config_xml (str): path to config file
-        
+        filename_out: str
+            output filename
+        config_xml: str
+            path to config file
+        clobber: bool
+            Whether or not to overwrite the existing file if it exists
         """
 
         h1("Exporting to FITS-IDI")
