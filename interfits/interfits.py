@@ -11,6 +11,7 @@ Currently reads UV-FITS and FITS-IDI.
 import sys
 import os
 import re
+import shutil
 from datetime import datetime
 
 import pyfits as pf
@@ -835,7 +836,7 @@ class InterFits(object):
             with open(filename_out, 'w') as f:
                 f.write(etree.tostring(self.xmlData))
 
-    def exportJson(self, dirname_out, dump_uv_data=False):
+    def exportJson(self, dirname_out, dump_uv_data=False, clobber=False):
         """ Export data as a directory of JSON files.
 
         dirname_out: str
@@ -846,7 +847,13 @@ class InterFits(object):
 
         if not os.path.exists(dirname_out):
             os.mkdir(dirname_out)
-
+        else:
+            if clobber:
+                print 'Removing existing directory %s...' % dirname_out
+                shutil.rmtree(dirname_out)
+            else:
+                raise IOError("Output directory %s already exists" % dirname_out)
+                
         h1("Creating JSON-Numpy dictionaries in %s" % dirname_out)
         dump_json(self.h_antenna, os.path.join(dirname_out, 'h_antenna.json'))
         dump_json(self.h_array_geometry, os.path.join(dirname_out, 'h_array_geometry.json'))
@@ -873,13 +880,20 @@ class InterFits(object):
             else:
                 dump_json(self.d_uv_data, os.path.join(dirname_out, 'd_uv_data.json'))
 
-    def exportHdf5(self, filename_out):
+    def exportHdf5(self, filename_out, clobber=False):
         """ Export data as HDF5 file
 
         filename_out: str
             name of output files into.
         """
         h1("Exporting to %s" % filename_out)
+        if os.path.exists(filename_out):
+            if clobber:
+                print 'Removing existing file %s...' % filename_out
+                os.remove(filename_out)
+            else:
+                raise IOError("Output file %s already exists" % filename_out)
+                
         self.hdf = h5py.File(filename_out, "w")
         
         if getattr(self, "_baselineList", None) is not None:
@@ -913,7 +927,7 @@ class InterFits(object):
                     hgroup.create_dataset(key, data=ifd[key])
         self.hdf.close()
 
-    def exportFitsidi(self, filename_out, config_xml=None):
+    def exportFitsidi(self, filename_out, config_xml=None, clobber=False):
         """ Export data as FITS IDI 
         
         filename_out (str): output filename
@@ -1108,11 +1122,14 @@ class InterFits(object):
         if self.verbose: print '\nVerifying integrity...'
         hdulist.verify()
 
-        if os.path.isfile(filename_out):
-            print 'Removing existing file %s...' % filename_out
-            os.remove(filename_out)
         print 'Writing to file %s...' % filename_out
-        hdulist.writeto(filename_out)
+        if os.path.isfile(filename_out):
+            if clobber:
+                print 'Removing existing file %s...' % filename_out
+                os.remove(filename_out)
+            else:
+                raise IOError("Output file %s already exists" % filename_out)
+        hdulist.writeto(filename_out, clobber=clobber)
 
     def verify_baseline_order(self):
         """ Check baseline IDs are in order """

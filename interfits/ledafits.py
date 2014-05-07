@@ -647,7 +647,7 @@ class LedaFits(InterFits):
                 src_names = ledafits_config.src_names
                 src_ras   = ledafits_config.src_ras
                 src_decs  = ledafits_config.src_decs
-                idx = src_names.index(src.upper())
+                idx = src_names.index(src)
                 h2("Phasing to %s"%src_names[idx])
                 ra_deg, dec_deg = src_ras[idx], src_decs[idx]
 
