@@ -66,7 +66,7 @@ class InterFits(object):
     """ InterFits: UV-data interchange class
     """
 
-    def __init__(self, filename=None, verbose=True):
+    def __init__(self, filename=None, filetype=None, verbose=True):
         self.filename = filename
         self.verbose = verbose
 
@@ -113,7 +113,7 @@ class InterFits(object):
         }
 
         if filename:
-            self.readFile(filename)
+            self.readFile(filename, filetype=filetype)
 
     def __repr__(self):
         to_print = ""
@@ -540,6 +540,12 @@ class InterFits(object):
             uv_datacols = ['UU', 'VV', 'WW', 'BASELINE', 'DATE', 'FLUX', 'INTTIM', 'FREQID', 'SOURCE']
             for k in uv_datacols:
                 self.d_uv_data[k] = self.tbl_uv_data.data[k]
+            self.t_int = self.d_uv_data['INTTIM'][0]
+            self.bls_id = []
+            for bl in self.d_uv_data['BASELINE']:
+                if bl in self.bls_id:
+                    break
+                self.bls_id.append( bl )
 
             try:
                 self.d_uv_data["TIME"] = self.tbl_uv_data.data["TIME"]
@@ -1215,7 +1221,10 @@ class InterFits(object):
         """ Run a series of diagnostics to test data validity """
         h1("Data verification")
         self.verify_uv_table()
-        self.verify_baseline_order()
+        try:
+            self.bls_id
+        except AttributeError:
+            self.verify_baseline_order()
         self.verify_frequency_axis()
 
     def formatStokes(self):
@@ -1405,6 +1414,15 @@ class InterFits(object):
         
         # Get the baseline information
         bls, ant_arr = coords.generateBaselineIds(self.n_ant)
+        try:
+            good = []
+            for i,id in enumerate(bls):
+                if id in self.bls_id:
+                    good.append( i )
+            bls = [bls[i] for i in good]
+            ant_arr = [ant_arr[i] for i in good]
+        except AttributeError:
+            pass
         nBL = len(bls)
         bls = self.d_uv_data["BASELINE"]
         
