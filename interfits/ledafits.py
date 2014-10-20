@@ -544,7 +544,8 @@ class LedaFits(InterFits):
         # Check what kind of file to load
 
         if filetype is not None:
-            self._inspectFile(filetype)
+            self.filename = filename
+            return self._inspectFile(filetype)
 
         else:
             if filename is None:
@@ -562,6 +563,9 @@ class LedaFits(InterFits):
     def _inspectFile(self, filetype):
         """ Lookup dictionary (case statement) for file types """
         return {
+                'fitsidi': self.inspectFitsidi,
+                'fidi': self.inspectFitsidi,
+                'idifits': self.inspectFitsidi,
                 'dada': self.inspectDada
         }.get(filetype, self.readError)()
 
@@ -624,6 +628,67 @@ class LedaFits(InterFits):
             metadata['chanbw']  = d.chan_bw_mhz * 1e6
 
             # Done
+            return metadata
+            
+    def inspectFitsidi(self):
+            """ Inspect a FITS IDI file and return a dictionary describing the file contents.
+            """
+
+            # Open
+            fits = pf.open(self.filename)
+            
+            # Load in the tables
+            tblGeo = None
+            tblFrq = None
+            tblAnt = None
+            tblSrc = None
+            tblDat = None
+            tblCal = None
+            for tbl in fits:
+                try:
+                    if tbl.header['EXTNAME'] == 'ARRAY_GEOMETRY':
+                        tblGeo = tbl
+                    elif tbl.header['EXTNAME'] == 'FREQUENCY':
+                        tblFrq = tbl
+                    elif tbl.header['EXTNAME'] == 'ANTENNA':
+                        tblAnt = tbl
+                    elif tbl.header['EXTNAME'] == 'SOURCE':
+                        tblSrc = tbl
+                    elif tbl.header['EXTNAME'] == 'UV_DATA':
+                        tblDat = tbl
+                    elif tbl.header['EXTNAME'] == 'CALIBRATION':
+                        tblCal = tbl
+                    else:
+                        print "\tWARNING: %s not recognized" % tbl.header["EXTNAME"]
+                except KeyError:
+                    pass
+                    
+            # Gather the metadata
+            metadata = {}
+            
+            ## Basic setup
+            metadata['stokes'] = ['XX', 'YY', 'XY', 'YX']
+            metadata['correlator'] = tblGeo.header['ARRNAM'].strip()
+            metadata['instrument'] = tblGeo.header['ARRNAM'].strip()
+            metadata['telescope']  = tblDat.header['TELESCOP'].strip()
+            
+            ## Integration time
+            metadata['tInt'] = tblDat.data['INTTIM'][0]
+            
+            ## Time offset
+            dt_obj = datetime.strptime(tblDat.header['DATE-OBS'].strip(), "%Y-%m-%dT%H:%M:%S")
+            date_obs = dt_obj.strftime("%Y-%m-%dT%H:%M:%S")
+            dd_obs   = dt_obj.strftime("%Y-%m-%d")
+            metadata['tstart'] = float(dt_obj.strftime("%s.%f"))
+
+            ## Frequency information
+            metadata['nchan']   = tblFrq.header['NO_CHAN']
+            metadata['reffreq'] = tblFrq.header['REF_FREQ']
+            metadata['refpixel'] = tblFrq.header['REF_PIXL']
+            metadata['chanbw']  = tblFrq.header['CHAN_BW']
+
+            # Done
+            fits.close()
             return metadata
             
     def _compute_lst_ha(self, src):
@@ -762,7 +827,17 @@ class LedaFits(InterFits):
         else:
             bl_ids, ant_arr = coords.generateBaselineIds(self.n_ant, autocorrs=False)
             bl_vecs = coords.computeBaselineVectors(xyz, autocorrs=False)
-
+        try:
+            good = []
+            for i,id in enumerate(bl_ids):
+                if id in self.bls_id:
+                    good.append( i )
+            bl_ids = [bl_ids[i] for i in good]
+            ant_arr = [ant_arr[i] for i in good]
+            bl_vecs = bl_vecs[good,:]
+        except AttributeError:
+            pass
+            
         n_iters = int(len(self.d_uv_data["BASELINE"]) / len(bl_ids))
 
 
@@ -964,6 +1039,15 @@ class LedaFits(InterFits):
             bls, ant_arr = coords.generateBaselineIds(self.n_ant, autocorrs=False)
         else:
             bls, ant_arr = coords.generateBaselineIds(self.n_ant, autocorrs=True)
+        try:
+            good = []
+            for i,id in enumerate(bls):
+                if id in self.bls_id:
+                    good.append( i )
+            bls = [bls[i] for i in good]
+            ant_arr = [ant_arr[i] for i in good]
+        except AttributeError:
+            pass
         n_int = len(flux) / len(bls)
 
         for nn in range(n_int):
@@ -975,6 +1059,70 @@ class LedaFits(InterFits):
                 p = np.exp(-1j * w * tg) # Needs to be -ve as compensating delay
                 phase_corrs = np.column_stack((p, p, p, p)).flatten()
                 flux[nn*len(bls) + ii] = flux[nn*len(bls) + ii] * phase_corrs
+
+        # Now we have applied geometric delays, we need to
+        # convert from viewing as complex to viewing as floats
+        assert flux.dtype == 'complex64'
+        self.d_uv_data["FLUX"] = flux.view('float32')
+
+    def unphase_to_src(self, src='ZEN', generate_uvw=True):
+        """ Unapply phase corrections to phase to source.
+
+        Generates new UVW coordinates, then unapplies geometric delay (W component)
+        to phase flux data to the new phase center.
+
+        Parameters
+        ----------
+        src (str): Source to phase to. Sources are three capital letters:
+            ZEN: Zenith (RA will be computed from timestamps)
+            CYG or CygA: Cygnus A
+            CAS or CasA: Cassiopeia A
+            TAU or TauA: Taurus A
+            VIR or VirA: Virgo A
+        generate_uvw (bool): Skip regeneration of UVW coords?
+
+        """
+        h1("Unphasing flux data to %s"%src)
+
+        current_tgs = self.d_uv_data["WW"]
+        if generate_uvw is True:
+            self.generateUVW(src, update_src=True)
+        freqs = self.formatFreqs()
+        w     = 2 * np.pi * freqs # Angular freq
+        # Note WW *is* the geometric delay tg
+        new_tgs   = self.d_uv_data["WW"]
+
+        try:
+            assert self.d_uv_data["FLUX"].dtype == 'float32'
+        except AssertionError:
+             raise RuntimeError("Unexpected data type for FLUX: %s" % str(self.d_uv_data["FLUX"].dtype))
+        flux  = self.d_uv_data["FLUX"].view('complex64')
+
+        bls = set(self.d_uv_data["BASELINE"])
+        if not 257 in bls:
+            bls, ant_arr = coords.generateBaselineIds(self.n_ant, autocorrs=False)
+        else:
+            bls, ant_arr = coords.generateBaselineIds(self.n_ant, autocorrs=True)
+        try:
+            good = []
+            for i,id in enumerate(bls):
+                if id in self.bls_id:
+                    good.append( i )
+            bls = [bls[i] for i in good]
+            ant_arr = [ant_arr[i] for i in good]
+        except AttributeError:
+            pass
+        n_int = len(flux) / len(bls)
+
+        for nn in range(n_int):
+            for ii in range(len(bls)):
+                # Compute phases for X and Y pol on antennas A and B
+                tg = new_tgs[nn*len(bls) + ii] - current_tgs[nn*len(bls) + ii]
+                #if ant1 < ant2:
+                #    tg *= -1    # Compensate for geometry
+                p = np.exp(-1j * w * tg) # Needs to be -ve as compensating delay
+                phase_corrs = np.column_stack((p, p, p, p)).flatten()
+                flux[nn*len(bls) + ii] = flux[nn*len(bls) + ii] / phase_corrs
 
         # Now we have applied geometric delays, we need to
         # convert from viewing as complex to viewing as floats
@@ -1013,11 +1161,11 @@ class LedaFits(InterFits):
         try:
              self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied += tdelts
-             self.phasesApplied = numpy.zeros_like(self.delaysApplied)
+             self.phasesApplied = np.zeros_like(self.delaysApplied)
         except AttributeError:
              self.delaysCalibrated = self.z_elength['DATE-GEN']
              self.delaysApplied = tdelts
-             self.phasesApplied = numpy.zeros_like(self.delaysApplied)
+             self.phasesApplied = np.zeros_like(self.delaysApplied)
              
         # Generate frequency array from metadata
         freqs = self.formatFreqs()
@@ -1032,6 +1180,15 @@ class LedaFits(InterFits):
         
         # Pre-compute the phasing information
         bls, ant_arr = coords.generateBaselineIds(self.n_ant)
+        try:
+            good = []
+            for i,id in enumerate(bls):
+                if id in self.bls_id:
+                    good.append( i )
+            bls = [bls[i] for i in good]
+            ant_arr = [ant_arr[i] for i in good]
+        except AttributeError:
+            pass
         w = 2 * np.pi * freqs # Angular freq
         delayCorrs = np.zeros((4, len(bls), len(freqs)), dtype=flux.dtype)
         for ii in range(len(bls)):
